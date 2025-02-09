@@ -23,3 +23,10 @@ spring:
       ddl-auto: create
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+logging:
+  level:
+    org.springframework: DEBUG
+
+application:
+  config:
+    students-url: http://localhost:8090/students

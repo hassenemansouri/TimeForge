@@ -8,18 +8,23 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-@RequiredArgsConstructor
+
 public class StudentService implements IStudent{
 
     private StudentRepository studentRepository;
 
 
-    public void saveStudent(Student student) {
+    public Student saveStudent(Student student) {
         studentRepository.save(student);
+        return student;
     }
 
     @Override
     public List<Student> getStudents() {
-        return (List<Student>) studentRepository.findAll ();
+        return studentRepository.findAll ();
+    }
+
+    public List<Student> findStudentsBySchools(Integer schoolId) {
+        return studentRepository.findAllBySchoolId(schoolId);
     }
 }

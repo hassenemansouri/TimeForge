@@ -1,26 +1,29 @@
 package com.HE.school;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/schools")
+@RequestMapping("/schools")
 @RequiredArgsConstructor
 public class SchoolController {
 
-    private SchoolService schoolService;
+    private final SchoolService schoolService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody School school) {
-        schoolService.saveSchool ( school );
+    public School saveSchool(@RequestBody School school) {
+        return schoolService.saveSchool(school);
     }
+
     @GetMapping
-    public ResponseEntity<List<School>> getAllSchools() {
-     return ResponseEntity.ok (schoolService.getSchools ());
+    public List<School> getAllSchools() {
+        return schoolService.getAllSchools();
+    }
+
+    @GetMapping("/{id}")
+    public FullSchoolResponse findSchoolWithStudents(@PathVariable Integer id) {
+        return schoolService.findSchoolsWithStudents(id);
     }
 }

@@ -1,24 +1,31 @@
-package com.HE.school;
+package com.HE.school; // ✅ Ensure the correct package
 
-
-import lombok.AllArgsConstructor;
+import com.HE.school.client.StudentClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@AllArgsConstructor
-@Service
+@Service // ✅ Make sure this annotation is present
 @RequiredArgsConstructor
-public class SchoolService implements ISchool {
+public class SchoolService {
 
-    private SchoolRepository schoolRepository;
+    private final StudentClient studentClient;
+    private final SchoolRepository schoolRepository;
 
-    public void saveSchool(School school) {
-        schoolRepository.save(school);
+    public School saveSchool(School school) {
+        return schoolRepository.save(school);
     }
 
-    public List<School> getSchools() {
-        return (List<School>) schoolRepository.findAll ();
+    public List<School> getAllSchools() {
+        return schoolRepository.findAll();
+    }
+
+    public FullSchoolResponse findSchoolsWithStudents(Integer schoolid) {
+        var school = schoolRepository.findById(schoolid)
+                .orElseGet(() -> new School(null, "NOT-FOUND", "NOT-FOUND"));
+
+        var students = studentClient.findAllStudentsBySchool(schoolid);
+
+        return new FullSchoolResponse(school.getName(), school.getEmail(), students);
     }
 }

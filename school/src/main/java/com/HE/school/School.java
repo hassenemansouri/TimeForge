@@ -1,19 +1,19 @@
 package com.HE.school;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.*;
 
-@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class School {
-    @Id
     private Integer id;
     private String name;
-    private String Email;
+    private String email;
+
+    public School(Integer id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
 
 }

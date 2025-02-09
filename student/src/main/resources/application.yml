@@ -16,8 +16,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/students
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: username
-    password: password
+    username: root
+    password:
   jpa:
     hibernate:
       ddl-auto: create
