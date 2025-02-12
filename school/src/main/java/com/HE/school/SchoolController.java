@@ -1,8 +1,9 @@
 package com.HE.school;
 
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 @RestController
@@ -18,12 +19,12 @@ public class SchoolController {
     }
 
     @GetMapping
-    public List<School> getAllSchools() {
-        return schoolService.getAllSchools();
+    public List<School> FindAllSchools() {
+        return schoolService.FindAllSchools();
     }
 
-    @GetMapping("/{id}")
-    public FullSchoolResponse findSchoolWithStudents(@PathVariable Integer id) {
-        return schoolService.findSchoolsWithStudents(id);
+    @GetMapping("/with-students/{school-id}")
+    public ResponseEntity<FullSchoolResponse> findAllSchools(@PathVariable("school-id") Integer schoolId) {
+        return ResponseEntity.ok (schoolService.findSchoolsWithStudents ( schoolId ));
     }
 }

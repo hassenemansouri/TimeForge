@@ -1,7 +1,5 @@
 package com.HE.school;
-
 import lombok.*;
-
 import java.util.List;
 
 @Getter
@@ -13,7 +11,6 @@ import java.util.List;
 public class FullSchoolResponse {
     private String name;
     private String email;
-
     private List<Student> students;
 
 }

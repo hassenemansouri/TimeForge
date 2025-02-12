@@ -1,11 +1,11 @@
-package com.HE.school; // ✅ Ensure the correct package
+package com.HE.school;
 
 import com.HE.school.client.StudentClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
-@Service // ✅ Make sure this annotation is present
+@Service
 @RequiredArgsConstructor
 public class SchoolService {
 
@@ -16,15 +16,15 @@ public class SchoolService {
         return schoolRepository.save(school);
     }
 
-    public List<School> getAllSchools() {
+    public List<School> FindAllSchools() {
         return schoolRepository.findAll();
     }
 
-    public FullSchoolResponse findSchoolsWithStudents(Integer schoolid) {
-        var school = schoolRepository.findById(schoolid)
+    public FullSchoolResponse findSchoolsWithStudents(Integer schoolId) {
+        var school = schoolRepository.findById(schoolId)
                 .orElseGet(() -> new School(null, "NOT-FOUND", "NOT-FOUND"));
 
-        var students = studentClient.findAllStudentsBySchool(schoolid);
+        var students = studentClient.findAllStudentsBySchool(schoolId);
 
         return new FullSchoolResponse(school.getName(), school.getEmail(), students);
     }
