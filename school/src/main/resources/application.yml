@@ -20,12 +20,22 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
 logging:
   level:
-    org.springframework: DEBUG
+    org:
+      springframework:
+        data:
+          jpa: DEBUG
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 
 application:
   config:

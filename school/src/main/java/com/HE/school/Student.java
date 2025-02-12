@@ -1,5 +1,6 @@
 package com.HE.school;
 
+
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
+
 public class Student {
     private String Firstname;
     private String Lastname;
