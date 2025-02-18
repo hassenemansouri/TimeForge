@@ -14,19 +14,6 @@
         <module name="gateway" />
         <module name="discovery" />
       </profile>
-      <profile name="Annotation profile for Goal_Reward" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
-        </processorPath>
-        <module name="Notification_Message_Collaboration" />
-        <module name="Goal_Reward" />
-        <module name="Project_Task" />
-        <module name="User_StrategicPartership" />
-      </profile>
       <profile name="Annotation profile for Workspace_Workflow" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -34,7 +21,11 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
+        <module name="Notification_Message_Collaboration" />
+        <module name="Goal_Reward" />
         <module name="Workspace_Workflow" />
+        <module name="Project_Task" />
+        <module name="User_StrategicPartership" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
