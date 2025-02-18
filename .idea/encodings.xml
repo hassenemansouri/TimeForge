@@ -3,16 +3,20 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/Collaboration/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Goal/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Goal_Reward/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Goal_Reward_/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Message/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Message_Notification_Collaboration_/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Notification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Notification_Message_Collaboration/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Project/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Project_Task/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Project_Task_/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Reward/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/StrategicPartership/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Task/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/User/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/User_StrategicPartership/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/User_StrategicPartnership/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Workflow/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Workspace/src/main/java" charset="UTF-8" />
