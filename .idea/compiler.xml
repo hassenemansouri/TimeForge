@@ -20,22 +20,59 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
         </processorPath>
-        <module name="student" />
-        <module name="school" />
+        <module name="Project" />
+        <module name="Task" />
+        <module name="Goal" />
+        <module name="User" />
+        <module name="Collaboration" />
+        <module name="Reward" />
+        <module name="Notification" />
+      </profile>
+      <profile name="Annotation profile for Workspace" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="StrategicPartership" />
+        <module name="Message" />
+        <module name="Workspace" />
+      </profile>
+      <profile name="Annotation profile for Workflow" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Workflow" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="school" target="17" />
       <module name="student (1)" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Collaboration" options="-parameters" />
+      <module name="Goal" options="-parameters" />
+      <module name="Message" options="-parameters" />
+      <module name="Notification" options="-parameters" />
+      <module name="Project" options="-parameters" />
+      <module name="Reward" options="-parameters" />
+      <module name="StrategicPartership" options="-parameters" />
+      <module name="Task" options="-parameters" />
+      <module name="User" options="-parameters" />
+      <module name="Workflow" options="-parameters" />
+      <module name="Workspace" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="school" options="-parameters" />
-      <module name="student" options="-parameters" />
       <module name="student (1)" options="-parameters" />
     </option>
   </component>
