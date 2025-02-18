@@ -1,4 +1,1 @@
-Sprint Boot Microservices
-
-Microservice sample project
-by HOUSSEM ELLOUZE 
+Sprint Boot Microservices Microservice sample project by Deep Tech Team 
