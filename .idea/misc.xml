@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/discovery/pom.xml" />
+        <option value="$PROJECT_DIR$/config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/student/pom.xml" />
+        <option value="$PROJECT_DIR$/school/pom.xml" />
+        <option value="$PROJECT_DIR$/Workflow/pom.xml" />
+        <option value="$PROJECT_DIR$/Workspace/pom.xml" />
+        <option value="$PROJECT_DIR$/User/pom.xml" />
+        <option value="$PROJECT_DIR$/StrategicPartership/pom.xml" />
+        <option value="$PROJECT_DIR$/Collaboration/pom.xml" />
+        <option value="$PROJECT_DIR$/Message/pom.xml" />
+        <option value="$PROJECT_DIR$/Notification/pom.xml" />
+        <option value="$PROJECT_DIR$/Task/pom.xml" />
+        <option value="$PROJECT_DIR$/Project/pom.xml" />
+        <option value="$PROJECT_DIR$/Goal/pom.xml" />
+        <option value="$PROJECT_DIR$/Reward/pom.xml" />
+        <option value="$PROJECT_DIR$/Message_Notification_Collaboration_/pom.xml" />
+        <option value="$PROJECT_DIR$/Goal_Reward_/pom.xml" />
+        <option value="$PROJECT_DIR$/Project_Task_/pom.xml" />
+        <option value="$PROJECT_DIR$/User_StrategicPartnership/pom.xml" />
+        <option value="$PROJECT_DIR$/Workspace_Workflow/pom.xml" />
+        <option value="$PROJECT_DIR$/Notification_Message_Collaboration/pom.xml" />
+        <option value="$PROJECT_DIR$/User_StrategicPartership/pom.xml" />
+        <option value="$PROJECT_DIR$/Project_Task/pom.xml" />
+        <option value="$PROJECT_DIR$/Goal_Reward/pom.xml" />
+      </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/Collaboration/pom.xml" />
+        <option value="$PROJECT_DIR$/Goal/pom.xml" />
+        <option value="$PROJECT_DIR$/Message/pom.xml" />
+        <option value="$PROJECT_DIR$/Notification/pom.xml" />
+        <option value="$PROJECT_DIR$/Project/pom.xml" />
+        <option value="$PROJECT_DIR$/Reward/pom.xml" />
+        <option value="$PROJECT_DIR$/StrategicPartership/pom.xml" />
+        <option value="$PROJECT_DIR$/Task/pom.xml" />
+        <option value="$PROJECT_DIR$/User/pom.xml" />
+        <option value="$PROJECT_DIR$/Workflow/pom.xml" />
+        <option value="$PROJECT_DIR$/Workspace/pom.xml" />
+        <option value="$PROJECT_DIR$/school/pom.xml" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>

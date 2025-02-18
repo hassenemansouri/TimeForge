@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <excludeFromCompile>
+      <file url="file://$PROJECT_DIR$/school/src/main/java/com/HE/school/SchoolService.java" />
+    </excludeFromCompile>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="config-server" />
+        <module name="gateway" />
+        <module name="discovery" />
+      </profile>
+      <profile name="Annotation profile for Goal_Reward" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Notification_Message_Collaboration" />
+        <module name="Goal_Reward" />
+        <module name="Project_Task" />
+        <module name="User_StrategicPartership" />
+      </profile>
+      <profile name="Annotation profile for Workspace_Workflow" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="Workspace_Workflow" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Collaboration" target="17" />
+      <module name="Goal" target="17" />
+      <module name="Goal_Reward_" target="17" />
+      <module name="Message" target="17" />
+      <module name="Message_Notification_Collaboration_" target="17" />
+      <module name="Notification" target="17" />
+      <module name="Project" target="17" />
+      <module name="Project_Task_" target="17" />
+      <module name="Reward" target="17" />
+      <module name="school" target="17" />
+      <module name="StrategicPartership" target="17" />
+      <module name="student (1)" target="17" />
+      <module name="Task" target="17" />
+      <module name="User" target="17" />
+      <module name="User_StrategicPartnership" target="17" />
+      <module name="Workflow" target="17" />
+      <module name="Workspace" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Collaboration" options="-parameters" />
+      <module name="Goal" options="-parameters" />
+      <module name="Goal_Reward" options="-parameters" />
+      <module name="Goal_Reward_" options="-parameters" />
+      <module name="Message" options="-parameters" />
+      <module name="Message_Notification_Collaboration_" options="-parameters" />
+      <module name="Notification" options="-parameters" />
+      <module name="Notification_Message_Collaboration" options="-parameters" />
+      <module name="Project" options="-parameters" />
+      <module name="Project_Task" options="-parameters" />
+      <module name="Project_Task_" options="-parameters" />
+      <module name="Reward" options="-parameters" />
+      <module name="StrategicPartership" options="-parameters" />
+      <module name="Task" options="-parameters" />
+      <module name="User" options="-parameters" />
+      <module name="User_StrategicPartership" options="-parameters" />
+      <module name="User_StrategicPartnership" options="-parameters" />
+      <module name="Workflow" options="-parameters" />
+      <module name="Workspace" options="-parameters" />
+      <module name="Workspace_Workflow" options="-parameters" />
+      <module name="config-server" options="-parameters" />
+      <module name="discovery" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="school" options="-parameters" />
+      <module name="student (1)" options="-parameters" />
+    </option>
+  </component>
+</project>
