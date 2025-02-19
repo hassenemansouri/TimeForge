@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tn.esprit.goal_reward.Entity.Reward;
 
+import java.util.Date;
 import java.util.List;
 
 @Document(collection = "goals")
@@ -20,9 +21,10 @@ public class Goal {
     @Id
     private int id;
 
-    private String name;
+    private String title;
     private String description;
-
+    private Date startDate;
+    private Date endDate;
     @DBRef
     private List<Reward> rewards;
 }
