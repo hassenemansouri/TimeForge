@@ -4,7 +4,7 @@ import tn.esprit.workspace_workflow.entity.Workspace;
 import java.util.List;
 
 public interface IWorkspace {
-    Workspace createWorkSpace(String managerId, String Workspace_name);
+    Workspace createWorkSpace(Workspace workspace);
     List<Workspace> getWorkspacesByManager(String managerId);
     List<Workspace> getAllWorkspaces();
     Workspace updateWorkSpace(String workspaceId, String newName, String managerId);
