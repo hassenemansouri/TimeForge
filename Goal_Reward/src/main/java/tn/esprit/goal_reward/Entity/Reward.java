@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 @Document(collection = "rewards")
 @Getter
 @Setter
@@ -18,7 +20,7 @@ public class Reward {
 
     private String type;
     private String description;
-
+    private Date dateAwarded;
     @DBRef
     private Goal goal;
 }
