@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "user_service" , url = "${application.config.users-url}")
+@FeignClient(name = "user-service" , url = "${application.config.users-url}")
 public interface UserClient {
 
     @GetMapping("/workspace/{workspace-id}")
