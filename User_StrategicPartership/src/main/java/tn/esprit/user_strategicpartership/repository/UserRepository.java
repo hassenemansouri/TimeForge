@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByWorkspaceId(String workspaceId);
+    List<User> findAllByCollaborationId(String collaboration_id);
+
 }

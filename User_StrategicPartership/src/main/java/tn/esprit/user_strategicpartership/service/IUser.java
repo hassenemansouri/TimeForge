@@ -9,4 +9,6 @@ public interface IUser {
     List<User> findAllUsers();
 
     List<User> findUsersByWorkspace(String workspaceId);
+
+
 }

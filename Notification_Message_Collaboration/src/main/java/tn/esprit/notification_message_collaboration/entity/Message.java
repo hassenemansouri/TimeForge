@@ -22,8 +22,8 @@ public class Message {
     @Id
     private String id; // Identifiant unique MongoDB
 
-    @DBRef
-    private User sender; // L'utilisateur qui a envoyé le message
+   // @DBRef
+    ///private User sender; // L'utilisateur qui a envoyé le message
 
     private String content; // Contenu du message
 

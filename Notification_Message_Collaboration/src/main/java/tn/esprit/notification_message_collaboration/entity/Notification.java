@@ -25,10 +25,10 @@ public class Notification {
     private LocalDateTime timestamp  ;
     private boolean isRead ;
     private String relatedEntityId  ;
-    @DBRef
-    private User recipient;  // Destinataire de la notification
-    @DBRef
-    private User sender;  // Expéditeur de la notification
+    //@DBRef
+    //private User recipient;  // Destinataire de la notification
+    //@DBRef
+    //private User sender;  // Expéditeur de la notification
 
 
 

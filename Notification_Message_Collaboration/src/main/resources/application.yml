@@ -36,3 +36,8 @@ spring:
   # Configuration du serveur de l'application
 
 # Exclure l'autoconfiguration JDBC car on utilise MongoDB
+
+
+application:
+  config:
+    users-url: http://localhost:8100/api/users
