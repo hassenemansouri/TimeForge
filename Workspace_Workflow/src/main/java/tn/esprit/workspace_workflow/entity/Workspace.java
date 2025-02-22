@@ -1,9 +1,6 @@
 package tn.esprit.workspace_workflow.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,14 +11,15 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Document(collection = "workspaces")
 public class Workspace {
     @Id
     private String id;
     private String Workspace_name;
 
-    @DBRef
-    List<Workflow> Workflows;
+    //@DBRef
+   // List<Workflow> Workflows;
 
 
 }

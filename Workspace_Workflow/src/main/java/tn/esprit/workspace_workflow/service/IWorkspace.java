@@ -1,5 +1,6 @@
 package tn.esprit.workspace_workflow.service;
 
+import tn.esprit.workspace_workflow.FullWorkspaceResponse;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface IWorkspace {
     Workspace updateWorkSpace(Workspace workspace);
     void deleteWorkSpace(Workspace workspace);
 
+    FullWorkspaceResponse findWorkspaceWithUsers(String workspaceId);
 }

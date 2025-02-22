@@ -1,8 +1,11 @@
 package tn.esprit.workspace_workflow.service;
 
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
+import tn.esprit.workspace_workflow.FullWorkspaceResponse;
+import tn.esprit.workspace_workflow.client.UserClient;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.repository.WorkspaceRepository;
 
@@ -16,6 +19,7 @@ public class WorkspaceService implements IWorkspace{
 
     private WorkspaceRepository workspaceRepository;
 
+    private UserClient userClient;
 
     public Workspace createWorkSpace(Workspace workspace) {
         return workspaceRepository.save(workspace);
@@ -37,5 +41,16 @@ public class WorkspaceService implements IWorkspace{
     public void deleteWorkSpace(Workspace workspace) {
         workspaceRepository.delete (workspace);
 
+    }
+
+    public FullWorkspaceResponse findWorkspaceWithUsers(String workspaceId) {
+        var workspace = workspaceRepository.findById(workspaceId)
+                .orElse(Workspace.builder()
+                        .Workspace_name("NOT_FOUND") // Correction du nom du champ
+                        .build());
+        var users = userClient.fundAllUsersByWorkspace ( workspaceId);
+        return FullWorkspaceResponse.builder ()
+                .Workspace_name ( workspace.getWorkspace_name () )
+                .build ();
     }
 }

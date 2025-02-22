@@ -20,4 +20,8 @@ public class UserServiceImpl implements IUser {
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
+
+    public List<User> findUsersByWorkspace(String workspaceId) {
+        return userRepository.findAllByWorkspaceId(workspaceId);
+    }
 }
