@@ -1,8 +1,13 @@
 package tn.esprit.goal_reward.Service;
 
 import tn.esprit.goal_reward.Entity.Goal;
+import tn.esprit.goal_reward.FullGoalResponse;
+
+import java.util.List;
 
 public interface IService {
 
-    public Goal ajouterGoal(Goal goal);
+    Goal ajouterGoal(Goal goal);
+    List<Goal> getGoals();
+    FullGoalResponse findGoalWithUsers(String goalId);
 }

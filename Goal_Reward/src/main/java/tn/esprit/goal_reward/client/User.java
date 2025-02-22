@@ -1,4 +1,4 @@
-package tn.esprit.notification_message_collaboration.client;
+package tn.esprit.goal_reward.client;
 
 import lombok.*;
 
@@ -7,9 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class User {
     private String name;
     private String email;
-
 }

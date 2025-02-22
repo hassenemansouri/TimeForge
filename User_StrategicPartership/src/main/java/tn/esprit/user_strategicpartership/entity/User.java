@@ -17,4 +17,5 @@ public class User {
     private String email;
     private String workspaceId;
     private String collaborationId;
+    private String goalId;
 }

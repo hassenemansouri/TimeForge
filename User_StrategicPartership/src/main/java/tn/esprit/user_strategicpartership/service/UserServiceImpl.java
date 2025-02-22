@@ -26,6 +26,9 @@ public class UserServiceImpl implements IUser {
         return userRepository.findAllByWorkspaceId(workspaceId);
     }
 
+    public List<User> findUsersByGoal(String goalId) {
+        return userRepository.findAllByGoalId(goalId);
+    }
 
     public List<User> findUsersCollab(String collaborationId) {
         return userRepository.findAllByCollaborationId (collaborationId);

@@ -2,7 +2,6 @@ package tn.esprit.user_strategicpartership.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.user_strategicpartership.entity.User;
@@ -40,4 +39,10 @@ public class UserController {
         return ResponseEntity.ok (userService.findUsersCollab(collaborationId));
 
     }
+    @GetMapping("/goal/{goal-id}")
+    public ResponseEntity<List<User>> findAllUsersByGoal(@PathVariable("goal-id") String goalId){
+        return ResponseEntity.ok (userService.findUsersByGoal(goalId));
+
+    }
+
 }
