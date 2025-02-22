@@ -20,8 +20,8 @@ spring:
   # Configuration MongoDB
   data:
     mongodb:
-      uri: mongodb://localhost:27017/timeforge
-      database: timeforge
+      uri: mongodb://localhost:27017/users
+      database: users
 
   # Niveau de log pour MongoDB
   logging:
