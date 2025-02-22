@@ -27,14 +27,15 @@ public class WorkspaceService implements IWorkspace{
     }
 
     public List<Workspace> getAllWorkspaces() {
-        return List.of ();
+        return workspaceRepository.findAll();
     }
 
-    public Workspace updateWorkSpace(String workspaceId, String newName, String managerId) {
-        return null;
+    public Workspace updateWorkSpace(Workspace workspace) {
+        return workspaceRepository.save (workspace);
     }
 
-    public void deleteWorkSpace(String workspaceId, String managerId) {
+    public void deleteWorkSpace(Workspace workspace) {
+        workspaceRepository.delete (workspace);
 
     }
 }

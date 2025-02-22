@@ -7,7 +7,7 @@ public interface IWorkspace {
     Workspace createWorkSpace(Workspace workspace);
     List<Workspace> getWorkspacesByManager(String managerId);
     List<Workspace> getAllWorkspaces();
-    Workspace updateWorkSpace(String workspaceId, String newName, String managerId);
-    void deleteWorkSpace(String workspaceId, String managerId);
+    Workspace updateWorkSpace(Workspace workspace);
+    void deleteWorkSpace(Workspace workspace);
 
 }
