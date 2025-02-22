@@ -44,5 +44,10 @@ public class UserController {
         return ResponseEntity.ok (userService.findUsersByGoal(goalId));
 
     }
+    @GetMapping("/project/{project-id}")
+    public ResponseEntity<List<User>> findAllUsersByProjects(@PathVariable("project-id") String projectId){
+        return ResponseEntity.ok (userService.findUsersByProjects(projectId));
+
+    }
 
 }

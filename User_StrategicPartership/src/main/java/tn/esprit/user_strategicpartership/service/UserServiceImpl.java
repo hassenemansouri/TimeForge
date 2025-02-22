@@ -33,4 +33,10 @@ public class UserServiceImpl implements IUser {
     public List<User> findUsersCollab(String collaborationId) {
         return userRepository.findAllByCollaborationId (collaborationId);
     }
+
+    public List<User> findUsersByProjects(String projectId) {
+        return userRepository.findAllByProjectId(projectId);
+    }
+
+
 }

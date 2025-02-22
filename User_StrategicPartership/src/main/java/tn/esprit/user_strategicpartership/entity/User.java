@@ -18,4 +18,5 @@ public class User {
     private String workspaceId;
     private String collaborationId;
     private String goalId;
+    private String projectId;
 }
