@@ -15,7 +15,7 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   application:
-    name: Project_Task  # Correction du nom de l'application
+    name: projects  # Correction du nom de l'application
 
   # Configuration MongoDB
   data:

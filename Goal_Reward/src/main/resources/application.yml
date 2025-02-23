@@ -15,7 +15,7 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   application:
-    name: Goal_Reward  # Correction du nom de l'application
+    name: goals  # Correction du nom de l'application
 
   # Configuration MongoDB
   data:
