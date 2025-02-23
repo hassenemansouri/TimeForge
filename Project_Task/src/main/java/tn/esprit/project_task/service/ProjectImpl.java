@@ -39,6 +39,7 @@ public class ProjectImpl implements IService{
         return FullProjectResponse.builder()
                 .title (project.getTitle ())
                 .description ( project.getDescription () )
+                .users ( users )
                 .build ();
     }
 }
