@@ -10,7 +10,7 @@ import tn.esprit.notification_message_collaboration.entity.Collaboration;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/collaborations")
+@RequestMapping("/collaborations")
 //http://localhost:8300/timeforge/swagger-ui/index.html#/
 public class CollaborationController {
     @Autowired

@@ -10,7 +10,7 @@ import tn.esprit.user_strategicpartership.service.UserServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @AllArgsConstructor
 //http://localhost:8100/timeforge/swagger-ui/index.html#/
 public class UserController {

@@ -11,7 +11,7 @@ import tn.esprit.goal_reward.Service.IService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/goals")
+@RequestMapping("/goals")
 @AllArgsConstructor
 public class TimeForgeController {
 

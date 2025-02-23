@@ -1,5 +1,6 @@
 server:
   port: 8222
+
 spring:
   application:
     name: gateway
@@ -9,17 +10,34 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: students
-          uri: http://localhost:8090
+        - id: users
+          uri: http://localhost:8100
           predicates:
-            - Path=/students/**
+            - Path=/users/**
 
-        - id: schools
-          uri: http://localhost:8070
+        - id: goals
+          uri: http://localhost:8200
           predicates:
-            - Path=/schools/**
+            - Path=/goals/**
+
+        - id: collaborations
+          uri: http://localhost:8300
+          predicates:
+            - Path=/collaborations/**
+
+        - id: projects
+          uri: http://localhost:8400
+          predicates:
+            - Path=/projects/**
+
+        - id: workspaces
+          uri: http://localhost:8500
+          predicates:
+            - Path=/workspaces/**
+
   config:
     import: optional:configserver:http://localhost:8888
+
 eureka:
   instance:
     hostname: localhost
@@ -27,12 +45,12 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://${eureka.instance.hostname} :${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
 logging:
   level:
     com.netflix.discovery: DEBUG
     org.springframework.cloud.netflix.eureka: DEBUG
-
 
 management:
   tracing:

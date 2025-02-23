@@ -40,4 +40,4 @@ spring:
 
 application:
   config:
-    users-url: http://localhost:8100/api/users
+    users-url: http://localhost:8100/users

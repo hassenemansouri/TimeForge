@@ -10,8 +10,8 @@ import tn.esprit.project_task.service.ProjectImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/collaborations")
-//http://localhost:8300/timeforge/swagger-ui/index.html#/
+@RequestMapping("/projects")
+//http://localhost:8400/timeforge/swagger-ui/index.html#/
 @AllArgsConstructor
 public class ProjectController {
 
