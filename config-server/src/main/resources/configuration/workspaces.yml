@@ -39,3 +39,8 @@ spring:
 application:
   config:
     users-url: http://localhost:8222/users
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
