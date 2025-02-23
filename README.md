@@ -1,1 +1,1 @@
-Sprint Boot Microservices Microservice sample project by Deep Tech Team 
+Time Forge Microservices by Deep Tech Team 
