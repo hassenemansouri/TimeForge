@@ -5,6 +5,8 @@ import tn.esprit.project_task.entity.Project;
 import java.util.List;
 
 public interface IService {
-    void addProject(Project project);
+    Project addProject(Project project);
     List<Project> findAllProjects();
+    void deleteProject(String projet_id);
+    Project modifyProject(Project project);
 }

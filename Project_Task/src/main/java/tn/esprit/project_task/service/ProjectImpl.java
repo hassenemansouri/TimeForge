@@ -16,17 +16,25 @@ public class ProjectImpl implements IService{
     private ProjectRepository projectRepository;
     private UserClient userClient;
 
-    public void addProject(Project project) {
+    public Project addProject(Project project) {
 
-        projectRepository.save(project);
+        return projectRepository.save(project);
 
     }
 
     public List<Project> findAllProjects() {
+
         return projectRepository.findAll();
     }
 
+    public void deleteProject(String projet_id) {
+        projectRepository.deleteById(projet_id);
 
+    }
+    public Project modifyProject(Project project) {
+
+        return projectRepository.save(project);
+    }
     public FullProjectResponse findProjectsWithUsers(String projet_id) {
         var project = projectRepository.findById(projet_id)
                 .orElse(Project.builder()
