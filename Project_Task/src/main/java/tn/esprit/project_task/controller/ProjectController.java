@@ -31,18 +31,16 @@ public class ProjectController {
         List<Project> listProjects =  service.findAllProjects ();
         return listProjects;
     }
+
     @GetMapping("WithUsers/{projet-id}")
     public ResponseEntity<FullProjectResponse> findCollaborations(@PathVariable("projet-id") String projet_id){
         return ResponseEntity.ok (service.findProjectsWithUsers(projet_id));
 
     }
-
-    // http://localhost:8089/tpfoyer/chambre/retrieve-chambre/8
-    //@GetMapping("/retrieve-chambre/{chambre-id}")
-   // public Chambre retrieveChambre(@PathVariable("chambre-id") Long chId) {
-     //   Chambre chambre = chambreService.retrieveChambre(chId);
-     //   return chambre;
-    //}
+    @GetMapping("/getprojectsbytype")
+    public List<Project> getChambresByTitle(@RequestParam String title) {
+        return service.getAllByTitleProject(title);
+    }
 
     @DeleteMapping("/remove-project/{project-id}")
     public void removeProject(@PathVariable("project-id") String projet_id) {

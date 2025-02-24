@@ -35,6 +35,12 @@ public class ProjectImpl implements IService{
 
         return projectRepository.save(project);
     }
+
+    @Override
+    public List<Project> getAllByTitleProject(String title) {
+        return projectRepository.findAllByTitleProject(title);
+    }
+
     public FullProjectResponse findProjectsWithUsers(String projet_id) {
         var project = projectRepository.findById(projet_id)
                 .orElse(Project.builder()
@@ -50,4 +56,5 @@ public class ProjectImpl implements IService{
                 .users ( users )
                 .build ();
     }
+
 }

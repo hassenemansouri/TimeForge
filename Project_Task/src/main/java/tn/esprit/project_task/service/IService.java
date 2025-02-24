@@ -9,4 +9,6 @@ public interface IService {
     List<Project> findAllProjects();
     void deleteProject(String projet_id);
     Project modifyProject(Project project);
+    List<Project> getAllByTitleProject(String title) ;
+
 }
