@@ -51,6 +51,8 @@ public class WorkspaceService implements IWorkspace{
         var users = userClient.fundAllUsersByWorkspace ( workspaceId);
         return FullWorkspaceResponse.builder ()
                 .Workspace_name ( workspace.getWorkspace_name () )
+                .Workspace_description ( workspace.getWorkspace_description () )
+                .users ( users )
                 .build ();
     }
 }

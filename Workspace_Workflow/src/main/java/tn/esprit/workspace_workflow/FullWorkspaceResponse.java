@@ -13,5 +13,6 @@ import java.util.List;
 public class FullWorkspaceResponse {
 
     private String Workspace_name;
+    private String Workspace_description;
     private List<User> users;
 }

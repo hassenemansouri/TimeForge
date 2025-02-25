@@ -17,6 +17,7 @@ public class Workspace {
     @Id
     private String id;
     private String Workspace_name;
+    private String Workspace_description;
 
     //@DBRef
    // List<Workflow> Workflows;
