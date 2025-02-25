@@ -8,7 +8,7 @@ import tn.esprit.project_task.service.TaskImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/projects")
+@RequestMapping("/tasks")
 //http://localhost:8400/timeforge/swagger-ui/index.html#/
 @AllArgsConstructor
 public class TaskController {
@@ -22,7 +22,7 @@ public class TaskController {
     }
 
     @GetMapping()
-    public List<Task> getAllProjects() {
+    public List<Task> getAllTasks() {
         List<Task> listTasks =  service.findAllTasks ();
         return listTasks;
     }
@@ -31,8 +31,8 @@ public class TaskController {
 
         service.deleteTask(id_task);
     }
-    @PutMapping("/modify-project")
-    public Task modifyProject(@RequestBody Task t) {
+    @PutMapping("/modify-task")
+    public Task modifyTask(@RequestBody Task t) {
         Task task = service.modifyTask(t);
         return task;
     }

@@ -9,8 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends MongoRepository<Project, String> {
-    List<Project> findAllByTitleProject(String title);
-    List<Project> findByTitleContainingIgnoreCase(String keyword);
 
-    List<Project> findByCreatedAtAfter(LocalDate date);
 }

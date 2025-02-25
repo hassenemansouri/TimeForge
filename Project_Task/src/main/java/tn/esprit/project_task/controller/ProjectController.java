@@ -32,18 +32,6 @@ public class ProjectController {
         List<Project> listProjects =  service.findAllProjects ();
         return listProjects;
     }
-
-    @GetMapping("WithUsers/{projet-id}")
-    public ResponseEntity<FullProjectResponse> findCollaborations(@PathVariable("projet-id") String projet_id){
-        return ResponseEntity.ok (service.findProjectsWithUsers(projet_id));
-
-    }
-    //@GetMapping("/getprojectsbytype")
-    //public List<Project> getProjectByTitle(@RequestParam String title) {
-
-    //    return service.(title);
- //   }
-
     @DeleteMapping("/remove-project/{project-id}")
     public void removeProject(@PathVariable("project-id") String projet_id) {
 
@@ -53,14 +41,6 @@ public class ProjectController {
     public Project modifyProject(@RequestBody Project project) {
         Project p = service.modifyProject(project);
         return p;
-    }
-    @GetMapping("/search/keyword")
-    public List<Project> searchByTitleKeyword(@RequestParam String keyword) {
-        return service.findProjectContainingIgnoreCase(keyword);
-    }
-    @GetMapping("/search/date")
-    public  List<Project> findProjectsAfterDate(@RequestParam String date) {
-        return service.findProjectsCreatedAfter(java.time.LocalDate.parse(date));
     }
 
 
