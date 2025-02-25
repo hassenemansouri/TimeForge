@@ -3,3 +3,15 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: gateway # Correction du nom de l'application
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+server:
+  port: 8222
