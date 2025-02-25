@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class WorkspaceController {
 
-    private  WorkspaceService workspaceService;
+    private WorkspaceService workspaceService;
 
 
     @PostMapping("/create")
@@ -42,11 +42,9 @@ public class WorkspaceController {
 
     @PutMapping("update/{workspaceId}")
     public ResponseEntity<Workspace> updateWorkspace(
-            @PathVariable String workspaceId,
-            @RequestParam String newName,
-            @RequestParam String newDescription) {
+            @PathVariable String workspaceId) {
         try {
-            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, newName, newDescription);
+            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId);
             return ResponseEntity.ok(updatedWorkspace);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -54,7 +52,7 @@ public class WorkspaceController {
     }
 
 
-    @DeleteMapping("/{workspaceId}")
+    @DeleteMapping("/delete/{workspaceId}")
     public ResponseEntity<Void> deleteWorkspace(@PathVariable String workspaceId) {
         try {
             workspaceService.deleteWorkspace(workspaceId);

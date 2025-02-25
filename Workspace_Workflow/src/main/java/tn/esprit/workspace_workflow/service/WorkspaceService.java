@@ -1,6 +1,7 @@
 package tn.esprit.workspace_workflow.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.workspace_workflow.FullWorkspaceResponse;
 import tn.esprit.workspace_workflow.client.UserClient;
@@ -12,19 +13,29 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class WorkspaceService {
 
     private WorkspaceRepository workspaceRepository;
     private UserClient userClient;
 
 
-    public Workspace createWorkspace( Workspace workspace) {
+    public Workspace createWorkspace(Workspace workspace) {
         if (workspace == null) {
-            throw new IllegalArgumentException("Le workspace ne peut pas être null");
+            throw new IllegalArgumentException("Le workspace ne peut pas être null.");
+        }
+
+        if (workspace.getWorkspace_name () == null || workspace.getWorkspace_name ().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du workspace est obligatoire.");
+        }
+
+        if (workspace.getWorkspace_description () == null || workspace.getWorkspace_description().isEmpty()) {
+            throw new IllegalArgumentException("La description du workspace est obligatoire.");
         }
 
         return workspaceRepository.save(workspace);
     }
+
 
 
     public Optional<Workspace> getWorkspaceById(String workspaceId) {
@@ -36,24 +47,23 @@ public class WorkspaceService {
     }
 
 
-    public Workspace updateWorkspace(String workspaceId, String newName, String newDescription) {
-        if (newName == null || newName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du workspace ne peut pas être vide");
-        }
+    public Workspace updateWorkspace(String workspaceId) {
+        Optional<Workspace> existingWorkspace = workspaceRepository.findById(workspaceId);
 
-        if (newDescription == null || newDescription.trim().isEmpty()) {
-            throw new IllegalArgumentException("La description du workspace ne peut pas être vide");
-        }
+        if (existingWorkspace.isPresent()) {
+            workspace.setId(workspaceId);
+            workspace.setWorkspace_name(workspace.getWorkspace_name());
+            workspace.setWorkspace_description(workspace.getWorkspace_description());
+            workspace.setWorkflows(workspace.getWorkflows());
 
-        return workspaceRepository.findById(workspaceId)
-                .map(workspace -> {
-                    workspace.setWorkspace_name(newName);
-                    workspace.setWorkspace_description(newDescription);
-                    workspace.setWorkflows(new ArrayList<>());
-                    return workspaceRepository.save(workspace);
-                })
-                .orElseThrow(() -> new RuntimeException("Espace de travail introuvable"));
+            log.info("Espace de travail mis à jour : {}", workspaceId);
+
+            return workspaceRepository.save(workspace);
+        } else {
+            throw new RuntimeException("Espace de travail introuvable");
+        }
     }
+
 
 
     public void deleteWorkspace(String workspaceId) {
