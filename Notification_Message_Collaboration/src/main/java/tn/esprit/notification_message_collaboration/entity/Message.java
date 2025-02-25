@@ -28,5 +28,7 @@ public class Message {
     private String parentMessageId; // ID du message parent (optionnel)
     private boolean isEdited; // Indique si le message a été modifié
     private boolean isDeleted; // Indique si le message a été supprimé (soft delete)
+    @DBRef
+    private Collaboration collaboration; // Référence à la collaboration
 }
 
