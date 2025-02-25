@@ -54,7 +54,7 @@ public class WorkspaceService implements IWorkspace{
         return FullWorkspaceResponse.builder ()
                 .Workspace_name ( workspace.getWorkspace_name () )
                 .Workspace_description ( workspace.getWorkspace_description () )
-                .Workflows ( workspace.getWorkflows ().toString () )
+                .Workflows ( workspace.getWorkflows ())
                 .users ( users )
                 .build ();
     }
