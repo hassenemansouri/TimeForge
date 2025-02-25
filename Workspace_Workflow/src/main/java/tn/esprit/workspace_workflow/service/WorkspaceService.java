@@ -47,7 +47,7 @@ public class WorkspaceService {
     }
 
 
-    public Workspace updateWorkspace(String workspaceId , Workspace workspace) {
+    public Workspace updateWorkspace(String workspaceId) {
         Optional<Workspace> existingWorkspace = workspaceRepository.findById(workspaceId);
 
         if (existingWorkspace.isPresent()) {
