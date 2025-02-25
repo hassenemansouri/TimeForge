@@ -11,5 +11,5 @@ server:
 jwt:
   auth:
     converter:
-      resource-id: alibou-rest-api
+      resource-id: time-forge-rest-api
       principle-attribute: preferred_username
