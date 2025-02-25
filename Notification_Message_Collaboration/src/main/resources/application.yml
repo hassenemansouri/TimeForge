@@ -3,3 +3,6 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: collaborations  # Correction du nom de l'application
+management:
+  tracing:
+    enabled: false
