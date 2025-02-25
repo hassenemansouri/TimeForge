@@ -19,4 +19,12 @@ public class User {
     private String collaborationId;
     private String goalId;
     private String projectId;
+    private Role role;
+
+    private boolean isManager() {
+        return this.role == Role.MANAGER;
+    }
+    private boolean isEmployee() {
+        return this.role == Role.EMPLOYEE;
+    }
 }

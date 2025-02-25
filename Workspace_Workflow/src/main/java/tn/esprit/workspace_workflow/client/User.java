@@ -11,4 +11,12 @@ import lombok.*;
 public class User {
     private String name;
     private String email;
+    private Role role;
+
+    public boolean isManager() {
+        return this.role == Role.MANAGER;
+    }
+    public boolean isEmployee() {
+        return this.role == Role.EMPLOYEE;
+    }
 }

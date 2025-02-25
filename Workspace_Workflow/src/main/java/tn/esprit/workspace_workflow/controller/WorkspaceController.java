@@ -1,6 +1,5 @@
 package tn.esprit.workspace_workflow.controller;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,34 +8,66 @@ import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.service.WorkspaceService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/workspaces")
 @AllArgsConstructor
-//http://localhost:8500/timeforge/swagger-ui/index.html#
 public class WorkspaceController {
 
-    private WorkspaceService service;
+    private  WorkspaceService workspaceService;
+
 
     @PostMapping("/create")
-    public Workspace createWorkSpace(Workspace workspace) {
-        return service.createWorkSpace (workspace);
+    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
+        Workspace createdWorkspace = workspaceService.createWorkspace(workspace);
+        return ResponseEntity.ok(createdWorkspace);
     }
-    @GetMapping
-    public List<Workspace> getAllWorkspaces() {
-        return service.getAllWorkspaces();
+
+
+    @GetMapping("getWorkspaceById/{workspaceId}")
+    public ResponseEntity<Workspace> getWorkspaceById(@PathVariable String workspaceId) {
+        Optional<Workspace> workspace = workspaceService.getWorkspaceById(workspaceId);
+        return workspace.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    @PutMapping
-    public Workspace updateWorkSpace(Workspace workspace){
-        return service.updateWorkSpace(workspace);
+
+
+    @GetMapping("/getAllWorkspaces")
+    public ResponseEntity<List<Workspace>> getAllWorkspaces() {
+        List<Workspace> workspaces = workspaceService.getAllWorkspaces();
+        return ResponseEntity.ok(workspaces);
     }
-    @DeleteMapping
-    public void deleteWorkSpace(Workspace workspace){
-        service.deleteWorkSpace(workspace);
+
+
+    @PutMapping("update/{workspaceId}")
+    public ResponseEntity<Workspace> updateWorkspace(
+            @PathVariable String workspaceId,
+            @RequestParam String newName,
+            @RequestParam String newDescription) {
+        try {
+            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, newName, newDescription);
+            return ResponseEntity.ok(updatedWorkspace);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
+    @DeleteMapping("/{workspaceId}")
+    public ResponseEntity<Void> deleteWorkspace(@PathVariable String workspaceId) {
+        try {
+            workspaceService.deleteWorkspace(workspaceId);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     @GetMapping("WithUsers/{workspace-id}")
     public ResponseEntity<FullWorkspaceResponse> findWorkspaces(@PathVariable("workspace-id") String workspaceId){
-        return ResponseEntity.ok (service.findWorkspaceWithUsers(workspaceId));
+        return ResponseEntity.ok (workspaceService.findWorkspaceWithUsers(workspaceId));
 
     }
 }

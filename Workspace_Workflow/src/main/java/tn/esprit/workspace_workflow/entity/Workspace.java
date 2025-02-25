@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.workspace_workflow.client.User;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class Workspace {
     private String Workspace_description;
     @DBRef
     private List<Workflow> Workflows;
+
 
 
 }
