@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-
 @Document(collection = "collaborations") // Collection MongoDB
 @Getter
 @Setter
@@ -30,6 +29,4 @@ public class Collaboration {
 
     @DBRef
     private List<Message> messages; // Liste des messages envoyés
-
-
 }

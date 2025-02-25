@@ -8,6 +8,7 @@ import java.util.List;
 public interface ICollaboration {
     void addCollaboration(Collaboration collaboration);
     List<Collaboration> findAllCollaborations();
-
     FullCollaborationResponse findCollaborationsWithUsers(String collaboration_id);
+    void updateCollaboration(String collaboration_id, Collaboration updatedCollaboration);
+    void deleteCollaboration(String collaboration_id);
 }

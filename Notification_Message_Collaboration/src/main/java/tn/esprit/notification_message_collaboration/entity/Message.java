@@ -1,34 +1,21 @@
 package tn.esprit.notification_message_collaboration.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-
-@Document(collection = "messages") // Collection MongoDB
+@Document(collection = "messages")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class Message {
-
     @Id
-    private String id; // Identifiant unique MongoDB
-
-   // @DBRef
-    ///private User sender; // L'utilisateur qui a envoyé le message
-
-    private String content; // Contenu du message
-
-    private LocalDateTime timestamp; // Date et heure d’envoi
-
-    @DBRef
-    private Collaboration collaboration; // Collaboration à laquelle appartient le message
+    private String message_id;
+    private String content;
+    private LocalDateTime sentAt;
+    private String senderId;
 }
