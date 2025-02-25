@@ -11,8 +11,8 @@ public interface IService {
     List<Project> findAllProjects();
     void deleteProject(String projet_id);
     Project modifyProject(Project project);
-    List<Project> getAllByTitleProject(String title) ;
-    Optional<Project> findProjectById(String projet_id);
+   // List<Project> getAllByTitleProject(String title) ;
+   // Optional<Project> findProjectById(String projet_id);
     List<Project> findProjectsCreatedAfter(LocalDate date);
     boolean existsById(String projectId);
     List<Project> findProjectContainingIgnoreCase(String keyword);

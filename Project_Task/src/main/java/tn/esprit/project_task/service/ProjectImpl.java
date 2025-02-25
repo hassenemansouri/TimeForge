@@ -38,13 +38,13 @@ public class ProjectImpl implements IService{
         return projectRepository.save(project);
     }
 
-    @Override
-    public List<Project> getAllByTitleProject(String title) {
-        return projectRepository.findAllByTitleProject(title);
-    }
-    public Optional<Project> findProjectById(String projet_id) {
-        return projectRepository.findById(projet_id);
-    }
+    //@Override
+    //public List<Project> getAllByTitleProject(String title) {
+     //   return projectRepository.findAllByTitleProject(title);
+    //}
+    //public Optional<Project> findProjectById(String projet_id) {
+       // return projectRepository.findById(projet_id);
+    //}
     public List<Project> findProjectsCreatedAfter(LocalDate date) {
         return projectRepository.findByCreatedAtAfter(date);
     }

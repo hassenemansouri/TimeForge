@@ -38,10 +38,11 @@ public class ProjectController {
         return ResponseEntity.ok (service.findProjectsWithUsers(projet_id));
 
     }
-    @GetMapping("/getprojectsbytype")
-    public List<Project> getChambresByTitle(@RequestParam String title) {
-        return service.getAllByTitleProject(title);
-    }
+    //@GetMapping("/getprojectsbytype")
+    //public List<Project> getProjectByTitle(@RequestParam String title) {
+
+    //    return service.(title);
+ //   }
 
     @DeleteMapping("/remove-project/{project-id}")
     public void removeProject(@PathVariable("project-id") String projet_id) {
