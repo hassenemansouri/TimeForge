@@ -47,10 +47,15 @@ public class WorkspaceService implements IWorkspace{
         var workspace = workspaceRepository.findById(workspaceId)
                 .orElse(Workspace.builder()
                         .Workspace_name("NOT_FOUND") // Correction du nom du champ
+                        .Workspace_description ( "NOT-FOUND" )
+                        .Workflows ( new ArrayList<>() )
                         .build());
         var users = userClient.fundAllUsersByWorkspace ( workspaceId);
         return FullWorkspaceResponse.builder ()
                 .Workspace_name ( workspace.getWorkspace_name () )
+                .Workspace_description ( workspace.getWorkspace_description () )
+                .Workflows ( workspace.getWorkflows ())
+                .users ( users )
                 .build ();
     }
 }

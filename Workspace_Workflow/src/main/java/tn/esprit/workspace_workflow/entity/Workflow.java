@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.workspace_workflow.client.User;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class Workflow {
 
     private List<String> steps;
 
-    //@DBRef
-    //List<User> collaborators;
+    @DBRef
+    private List<User> collaborators;
 
 
 
