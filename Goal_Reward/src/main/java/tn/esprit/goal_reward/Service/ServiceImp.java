@@ -46,6 +46,7 @@ public class ServiceImp implements IService {
         return FullGoalResponse.builder()
                 .title(goal.getTitle())
                 .description(goal.getDescription())
+                .users ( users )
                 .build();
     }
 
