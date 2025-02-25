@@ -18,9 +18,6 @@ public class WorkspaceService {
     private UserClient userClient;
 
 
-    /**
-     * Créer un nouvel espace de travail avec contrôle de saisie
-     */
     public Workspace createWorkspace( Workspace workspace) {
         if (workspace == null) {
             throw new IllegalArgumentException("Le workspace ne peut pas être null");
@@ -29,23 +26,16 @@ public class WorkspaceService {
         return workspaceRepository.save(workspace);
     }
 
-    /**
-     * Récupérer un espace de travail par ID
-     */
+
     public Optional<Workspace> getWorkspaceById(String workspaceId) {
         return workspaceRepository.findById(workspaceId);
     }
 
-    /**
-     * Récupérer tous les espaces de travail
-     */
     public List<Workspace> getAllWorkspaces() {
         return workspaceRepository.findAll();
     }
 
-    /**
-     * Mettre à jour un espace de travail
-     */
+
     public Workspace updateWorkspace(String workspaceId, String newName, String newDescription) {
         if (newName == null || newName.trim().isEmpty()) {
             throw new IllegalArgumentException("Le nom du workspace ne peut pas être vide");
@@ -65,9 +55,7 @@ public class WorkspaceService {
                 .orElseThrow(() -> new RuntimeException("Espace de travail introuvable"));
     }
 
-    /**
-     * Supprimer un espace de travail
-     */
+
     public void deleteWorkspace(String workspaceId) {
         if (!workspaceRepository.existsById(workspaceId)) {
             throw new RuntimeException("Espace de travail introuvable");
@@ -75,9 +63,7 @@ public class WorkspaceService {
         workspaceRepository.deleteById(workspaceId);
     }
 
-    /**
-     * Récupérer un espace de travail avec ses utilisateurs
-     */
+
     public FullWorkspaceResponse findWorkspaceWithUsers(String workspaceId) {
         var workspace = workspaceRepository.findById(workspaceId)
                 .orElse(Workspace.builder()
