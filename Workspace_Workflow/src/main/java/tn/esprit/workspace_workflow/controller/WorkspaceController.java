@@ -42,9 +42,10 @@ public class WorkspaceController {
 
     @PutMapping("update/{workspaceId}")
     public ResponseEntity<Workspace> updateWorkspace(
-            @PathVariable String workspaceId) {
+            @PathVariable String workspaceId,
+            @RequestBody Workspace workspace) {
         try {
-            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId);
+            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId , workspace);
             return ResponseEntity.ok(updatedWorkspace);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

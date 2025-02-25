@@ -3,7 +3,6 @@ package tn.esprit.workspace_workflow.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.workspace_workflow.client.User;
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.service.WorkflowService;
 
@@ -38,13 +37,9 @@ public class WorkflowController {
     }
 
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Workflow> updateWorkflow(@PathVariable String id,
-                                                   @RequestParam String name,
-                                                   @RequestBody List<String> steps,
-                                                   @RequestBody List<User> collaborators,
-                                                   @RequestBody User creator) {
-        return ResponseEntity.ok(workflowService.updateWorkflow(id, name, steps, collaborators, creator));
+    @PutMapping("/update/{workflowId}")
+    public ResponseEntity<Workflow> updateWorkflow(@PathVariable String workflowId , @RequestBody Workflow workflow) {
+        return ResponseEntity.ok(workflowService.updateWorkflow(workflowId, workflow));
     }
 
 
