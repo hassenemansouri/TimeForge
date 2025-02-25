@@ -25,4 +25,6 @@ public class Goal {
     private Date endDate;
     @DBRef
     private List<Reward> rewards;
+
+
 }
