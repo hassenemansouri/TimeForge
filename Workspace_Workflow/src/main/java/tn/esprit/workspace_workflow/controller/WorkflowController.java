@@ -28,15 +28,12 @@ public class WorkflowController {
         }
     }
 
-
-
     @GetMapping("/getWorkflowById/{workflowId}")
     public ResponseEntity<Workflow> getWorkflowById(@PathVariable String workflowId) {
         return workflowService.getWorkflowById(workflowId)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     @GetMapping("/getAllWorkflows")
     public ResponseEntity<List<Workflow>> getAllWorkflows() {

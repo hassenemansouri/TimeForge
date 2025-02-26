@@ -7,17 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.FullWorkspaceResponse;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.service.WorkspaceService;
-
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/workspaces")
 @AllArgsConstructor
 public class WorkspaceController {
 
-    private final WorkspaceService workspaceService;
-
+    private WorkspaceService workspaceService;
 
     @PostMapping("/create")
     public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
@@ -30,7 +28,6 @@ public class WorkspaceController {
         }
     }
 
-
     @GetMapping("/getWorkspaceById/{workspaceId}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable String workspaceId) {
         return workspaceService.getWorkspaceById(workspaceId)
@@ -38,9 +35,6 @@ public class WorkspaceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    /**
-     * Récupérer tous les workspaces
-     */
     @GetMapping("/getAllWorkspaces")
     public ResponseEntity<List<Workspace>> getAllWorkspaces() {
         return ResponseEntity.ok(workspaceService.getAllWorkspaces());
