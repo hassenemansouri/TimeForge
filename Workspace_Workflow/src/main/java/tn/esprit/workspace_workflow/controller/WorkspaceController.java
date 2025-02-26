@@ -1,6 +1,7 @@
 package tn.esprit.workspace_workflow.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,19 +14,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/workspaces")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
+@Slf4j
 public class WorkspaceController {
 
     private WorkspaceService workspaceService;
 
     @PostMapping("/create")
-    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
-        try {
-            Workspace createdWorkspace = workspaceService.createWorkspace(workspace);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkspace);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
-        }
+    public Workspace createWorkspace(@RequestBody Workspace workspace) {
+        Workspace savedWorkspace = workspaceService.createWorkspace (workspace);
+        System.out.println("✅ Workspace sauvegardé: " + savedWorkspace);
+        return savedWorkspace;
     }
 
     @GetMapping("/getWorkspaceById/{workspaceId}")

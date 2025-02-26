@@ -1,5 +1,6 @@
 package tn.esprit.workspace_workflow.entity;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -19,9 +20,11 @@ public class Workspace {
     private String id;
 
     @NotNull(message = "Workspace_name cannot be null")
+
     private String Workspace_name;
 
     @NotNull(message = "Workspace_description cannot be null")
+
     private String Workspace_description;
 
     @DBRef

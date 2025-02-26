@@ -1,12 +1,10 @@
 package tn.esprit.workspace_workflow.service;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.workspace_workflow.client.User;
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.repository.WorkflowRepository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +19,6 @@ public class WorkflowService {
     public Workflow createWorkflow(Workflow workflow) {
         return workflowRepository.save(workflow);
     }
-
-
 
     public Optional<Workflow> getWorkflowById(String workflowId) {
         return workflowRepository.findById(workflowId);
@@ -79,10 +75,10 @@ public class WorkflowService {
         return workflowRepository.save(workflow);
     }
 
-    public double trackWorkflowProgress(String workflowId) {
+    public String trackWorkflow(String workflowId) {
 
         boolean exists = workflowRepository.existsById(workflowId);
-        return exists ? 100.0 : 0.0;
+        return exists ? "Valide" : "Non Valide";
     }
 
 

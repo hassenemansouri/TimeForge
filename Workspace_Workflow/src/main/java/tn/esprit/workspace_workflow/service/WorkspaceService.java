@@ -6,8 +6,6 @@ import tn.esprit.workspace_workflow.FullWorkspaceResponse;
 import tn.esprit.workspace_workflow.client.UserClient;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.repository.WorkspaceRepository;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +18,6 @@ public class WorkspaceService {
 
 
     public Workspace createWorkspace(Workspace workspace) {
-        if (workspace.getWorkspace_name() == null || workspace.getWorkspace_name().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du workspace est obligatoire.");
-        }
         return workspaceRepository.save(workspace);
     }
 
@@ -76,4 +71,5 @@ public class WorkspaceService {
                 .users(users)
                 .build();
     }
+
 }
