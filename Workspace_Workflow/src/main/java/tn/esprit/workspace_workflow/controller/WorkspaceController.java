@@ -1,6 +1,8 @@
 package tn.esprit.workspace_workflow.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.FullWorkspaceResponse;
@@ -19,9 +21,25 @@ public class WorkspaceController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
-        Workspace createdWorkspace = workspaceService.createWorkspace(workspace);
-        return ResponseEntity.ok(createdWorkspace);
+    public ResponseEntity<String> createWorkspace(@RequestParam("Workspace_name") @NonNull String Workspace_name ,
+                                                  @RequestParam("Workspace_description") @NonNull String Workspace_description
+    ) {
+
+        try {
+            Workspace workSpace = new Workspace ();
+            workspaceService.createWorkspace ( workSpace );
+
+            System.out.println ("Workspace name : " + Workspace_name +
+                    " Description : " + Workspace_description);
+
+            return ResponseEntity.status( HttpStatus.CREATED).body("Workspace added successfully");
+
+        }
+        catch (Exception e) {
+            return ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body("An error occurred: " + e.getMessage());
+        }
+
     }
 
 
@@ -41,16 +59,25 @@ public class WorkspaceController {
 
 
     @PutMapping("update/{workspaceId}")
-    public ResponseEntity<Workspace> updateWorkspace(
-            @PathVariable String workspaceId,
-            @RequestBody Workspace workspace) {
+    public ResponseEntity<String> updateWorkspace(@RequestParam("Workspace_name") @NonNull String workspaceName,
+                                                  @RequestParam("Workspace_description") @NonNull String workspaceDescription,
+                                                  @PathVariable String workspaceId) {
+
         try {
-            Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId , workspace);
-            return ResponseEntity.ok(updatedWorkspace);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            Workspace workspace = new Workspace();
+
+            workspaceService.updateWorkspace(workspace, workspaceId);
+
+            System.out.println("Workspace name: " + workspaceName +
+                    " Description: " + workspaceDescription);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Workspace updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred: " + e.getMessage());
         }
     }
+
 
 
     @DeleteMapping("/delete/{workspaceId}")
