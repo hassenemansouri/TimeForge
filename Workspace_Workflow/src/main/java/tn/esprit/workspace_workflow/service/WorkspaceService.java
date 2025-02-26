@@ -33,6 +33,11 @@ public class WorkspaceService {
             throw new IllegalArgumentException("La description du workspace est obligatoire.");
         }
 
+        workspace.setId ( workspace.getId () );
+        workspace.setWorkspace_name ( workspace.getWorkspace_name () );
+        workspace.setWorkspace_description (workspace.getWorkspace_description ());
+        workspace.setWorkflows ( new ArrayList<> () );
+        System.out.println ("Workspace created: " + workspace.getWorkspace_name ());
         return workspaceRepository.save(workspace);
     }
 
@@ -60,7 +65,7 @@ public class WorkspaceService {
 
             return workspaceRepository.save(workspace);
         } else {
-            throw new RuntimeException("Espace de travail introuvable");
+            throw new RuntimeException("Espace de travail introuvable : " + workspaceId);
         }
     }
 

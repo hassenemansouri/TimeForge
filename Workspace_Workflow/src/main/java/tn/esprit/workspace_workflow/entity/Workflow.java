@@ -1,5 +1,6 @@
 package tn.esprit.workspace_workflow.entity;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +21,17 @@ public class Workflow {
     @Id
     private String id;
 
+    @NotNull(message = "workflowName cannot be null")
     private String workflowName;
 
+    @NotNull(message = "Steps cannot be null")
     private List<String> steps = new ArrayList<>();
 
+    @NotNull(message = "collaborators cannot be null")
     @DBRef
     private List<User> collaborators = new ArrayList<>();
 
+    @NotNull(message = "creator cannot be null")
     @DBRef
     private User creator;
 

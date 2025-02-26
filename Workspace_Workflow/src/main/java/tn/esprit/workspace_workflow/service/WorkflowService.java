@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.repository.WorkflowRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +35,14 @@ public class WorkflowService {
             throw new IllegalArgumentException("Le créateur du workflow est obligatoire.");
         }
 
+        workflow.setId ( workflow.getId () );
+        workflow.setWorkflowName ( workflow.getWorkflowName().trim() );
+        workflow.setSteps ( workflow.getSteps() );
+        workflow.setCreator ( workflow.getCreator() );
+        workflow.setCollaborators ( workflow.getCollaborators() );
+
+        System.out.println ("Workflow Created : " + workflow);
+
         return workflowRepository.save(workflow);
     }
 
@@ -60,7 +69,7 @@ public class WorkflowService {
                     log.info("Workflow mise à jour : {}", workflowId);
                 }
         else {
-            throw new RuntimeException("Workflow non trouvée");
+            throw new RuntimeException("Workflow non trouvée : " + workflowId);
         }
         return workflowRepository.save(workflow);
 
