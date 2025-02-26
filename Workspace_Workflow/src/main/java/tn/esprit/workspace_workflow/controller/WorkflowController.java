@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.service.WorkflowService;
-
+import tn.esprit.workspace_workflow.client.User;
 import java.util.List;
 
 @RestController
@@ -63,4 +63,17 @@ public class WorkflowController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PutMapping("/{workflowId}/assign-collaborators")
+    public ResponseEntity<Workflow> assignCollaborators(@PathVariable String workflowId, @RequestBody List<User> collaborators) {
+        Workflow updatedWorkflow = workflowService.assignCollaborators(workflowId, collaborators);
+        return ResponseEntity.ok(updatedWorkflow);
+    }
+
+    @GetMapping("/{workflowId}/progress")
+    public ResponseEntity<Double> trackWorkflowProgress(@PathVariable String workflowId) {
+        double progress = workflowService.trackWorkflowProgress(workflowId);
+        return ResponseEntity.ok(progress);
+    }
+
 }
