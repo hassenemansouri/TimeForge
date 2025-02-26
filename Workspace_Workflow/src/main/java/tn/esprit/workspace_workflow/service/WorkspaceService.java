@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class WorkspaceService {
 
     private WorkspaceRepository workspaceRepository;
@@ -61,7 +60,6 @@ public class WorkspaceService {
             workspace.setWorkspace_description(workspace.getWorkspace_description());
             workspace.setWorkflows(workspace.getWorkflows());
 
-            log.info("Espace de travail mis à jour : {}", workspaceId);
 
             return workspaceRepository.save(workspace);
         } else {

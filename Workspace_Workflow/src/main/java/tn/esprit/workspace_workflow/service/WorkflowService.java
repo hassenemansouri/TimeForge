@@ -66,7 +66,6 @@ public class WorkflowService {
                     workflow.setSteps(workflow.getSteps());
                     workflow.setCollaborators (workflow.getCollaborators());
                     workflow.setCreator (workflow.getCreator());
-                    log.info("Workflow mise à jour : {}", workflowId);
                 }
         else {
             throw new RuntimeException("Workflow non trouvée : " + workflowId);

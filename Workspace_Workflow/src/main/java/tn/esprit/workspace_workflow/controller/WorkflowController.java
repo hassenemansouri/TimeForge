@@ -1,6 +1,8 @@
 package tn.esprit.workspace_workflow.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.entity.Workflow;
@@ -18,9 +20,26 @@ public class WorkflowController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
-        return ResponseEntity.ok(workflowService.createWorkflow(workflow));
+    public ResponseEntity<String> createWorkflow(@RequestParam("workflowName") @NonNull String workflowName ,
+                                            @RequestParam("steps") @NonNull String steps,
+                                            @RequestParam("creator") @NonNull String creator) {
+        try {
+            Workflow workflow = new Workflow ();
+
+            workflowService.createWorkflow(workflow);
+
+            System.out.println ("Workflow Name : " + workflowName
+                    + " Steps :" + steps +
+                    " Creator : " + creator);
+
+            return ResponseEntity.status( HttpStatus.CREATED).body("Workflow added successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred: " + e.getMessage());
+        }
     }
+
 
 
     @GetMapping("/getWorkflowById/{id}")
@@ -37,14 +56,31 @@ public class WorkflowController {
     }
 
 
-    @PutMapping("/update/{workflowId}")
-    public ResponseEntity<Workflow> updateWorkflow(@PathVariable String workflowId , @RequestBody Workflow workflow) {
-        return ResponseEntity.ok(workflowService.updateWorkflow(workflowId, workflow));
+    @PutMapping("update/{workflowId}")
+    public ResponseEntity<String> updateWorkflow(@RequestParam("workflowName") @NonNull String workflowName ,
+                                                 @RequestParam("steps") @NonNull String steps,
+                                                 @RequestParam("creator") @NonNull String creator,
+                                                  @PathVariable String workflowId) {
+
+        try {
+            Workflow workflow = new Workflow ();
+
+            workflowService.updateWorkflow ( workflowId, workflow );
+
+            System.out.println ("Workflow Name : " + workflowName
+                    + " Steps :" + steps +
+                    " Creator : " + creator);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Workflow updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred: " + e.getMessage());
+        }
     }
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteWorkflow(@PathVariable String id) {
+    public ResponseEntity<String> deleteWorkflow(@PathVariable String id) {
         workflowService.deleteWorkflow(id);
         return ResponseEntity.noContent().build();
     }
