@@ -64,15 +64,15 @@ public class WorkflowController {
         }
     }
 
-    @PutMapping("/{workflowId}/assign-collaborators")
+    @PutMapping("/assign-collaborators/{workflowId}")
     public ResponseEntity<Workflow> assignCollaborators(@PathVariable String workflowId, @RequestBody List<User> collaborators) {
         Workflow updatedWorkflow = workflowService.assignCollaborators(workflowId, collaborators);
         return ResponseEntity.ok(updatedWorkflow);
     }
 
-    @GetMapping("/{workflowId}/progress")
-    public ResponseEntity<Double> trackWorkflowProgress(@PathVariable String workflowId) {
-        double progress = workflowService.trackWorkflowProgress(workflowId);
+    @GetMapping("/Track/{workflowId}")
+    public ResponseEntity<Double> trackWorkflow(@PathVariable String workflowId) {
+        double progress = workflowService.trackWorkflow(workflowId);
         return ResponseEntity.ok(progress);
     }
 

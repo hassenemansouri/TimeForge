@@ -79,7 +79,7 @@ public class WorkflowService {
         return workflowRepository.save(workflow);
     }
 
-    public double trackWorkflowProgress(String workflowId) {
+    public double trackWorkflow(String workflowId) {
 
         boolean exists = workflowRepository.existsById(workflowId);
         return exists ? 100.0 : 0.0;
