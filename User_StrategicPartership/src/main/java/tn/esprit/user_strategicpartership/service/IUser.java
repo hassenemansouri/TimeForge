@@ -10,5 +10,6 @@ public interface IUser {
     List<User> findUsersByWorkspace(String workspaceId);
     List<User> findUsersByGoal(String goalId);
 
+    public void deleteUser(String id);
 
 }
