@@ -11,7 +11,7 @@ import tn.esprit.goal_reward.Service.IService;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/goals")
 @AllArgsConstructor
