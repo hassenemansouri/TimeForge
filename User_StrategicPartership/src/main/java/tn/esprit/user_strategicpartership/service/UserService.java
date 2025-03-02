@@ -1,5 +1,6 @@
 package tn.esprit.user_strategicpartership.service;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,9 @@ public class UserService {
         return userRepository.findAllByGoalId(goalId);
     }
 
-
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
+    }
 
 
     public void deleteUser(String id) {

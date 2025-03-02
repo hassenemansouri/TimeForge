@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface CollaborationRepository extends MongoRepository<Collaboration, String> {
-    List<Collaboration> findByChatTitleContainingIgnoreCase(String chatTitle); // Recherche par titre
+    List<Collaboration> findByChatTitleContainingIgnoreCase(String chatTitle); // Recherche par TITRE
     List<Collaboration> findByParticipantsId(String userId); // Utilise "participantsId" au lieu de "participants_Id"
 }

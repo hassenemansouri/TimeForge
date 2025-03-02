@@ -2,4 +2,4 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   application:
-    name: users  # Correction du nom de l'application
+    name: users  # Correct name of the application
