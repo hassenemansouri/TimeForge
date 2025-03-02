@@ -8,7 +8,7 @@ import tn.esprit.notification_message_collaboration.Service.IMessage;
 import tn.esprit.notification_message_collaboration.entity.Message;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/api/messages")
 @AllArgsConstructor
