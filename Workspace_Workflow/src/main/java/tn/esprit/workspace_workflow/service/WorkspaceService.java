@@ -34,11 +34,11 @@ public class WorkspaceService {
 
     public Workspace updateWorkspace(String workspaceId, Workspace updatedWorkspace) {
         return workspaceRepository.findById(workspaceId).map(existingWorkspace -> {
-            if (updatedWorkspace.getWorkspace_name() != null) {
-                existingWorkspace.setWorkspace_name(updatedWorkspace.getWorkspace_name());
+            if (updatedWorkspace.getWorkspaceName () != null) {
+                existingWorkspace.setWorkspaceName (updatedWorkspace.getWorkspaceName ());
             }
-            if (updatedWorkspace.getWorkspace_description() != null) {
-                existingWorkspace.setWorkspace_description(updatedWorkspace.getWorkspace_description());
+            if (updatedWorkspace.getWorkspaceDescription () != null) {
+                existingWorkspace.setWorkspaceDescription (updatedWorkspace.getWorkspaceDescription ());
             }
             if (updatedWorkspace.getWorkflows() != null) {
                 existingWorkspace.setWorkflows(updatedWorkspace.getWorkflows());
@@ -65,8 +65,8 @@ public class WorkspaceService {
         var users = userClient.fundAllUsersByWorkspace(workspaceId);
 
         return FullWorkspaceResponse.builder()
-                .Workspace_name(workspace.getWorkspace_name())
-                .Workspace_description(workspace.getWorkspace_description())
+                .Workspace_name(workspace.getWorkspaceName ())
+                .Workspace_description(workspace.getWorkspaceDescription ())
                 .Workflows(workspace.getWorkflows())
                 .users(users)
                 .build();

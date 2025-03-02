@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.FullWorkspaceResponse;
+import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.service.WorkspaceService;
 import java.util.List;
@@ -21,11 +22,18 @@ public class WorkspaceController {
     private WorkspaceService workspaceService;
 
     @PostMapping("/create")
-    public Workspace createWorkspace(@RequestBody Workspace workspace) {
+    public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
+        System.out.println("WorkspaceName: " + workspace.getWorkspaceName () +
+                " WorkspaceDescription: " + workspace.getWorkspaceDescription ());
+
+        if (workspace.getWorkspaceName ()== null || workspace.getWorkspaceDescription ()== null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
         Workspace savedWorkspace = workspaceService.createWorkspace (workspace);
-        System.out.println("✅ Workspace sauvegardé: " + savedWorkspace);
-        return savedWorkspace;
+        return ResponseEntity.ok(savedWorkspace);
     }
+
 
     @GetMapping("/getWorkspaceById/{workspaceId}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable String workspaceId) {
