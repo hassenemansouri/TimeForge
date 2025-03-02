@@ -6,8 +6,6 @@ import tn.esprit.workspace_workflow.FullWorkspaceResponse;
 import tn.esprit.workspace_workflow.client.UserClient;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.repository.WorkspaceRepository;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +18,6 @@ public class WorkspaceService {
 
 
     public Workspace createWorkspace(Workspace workspace) {
-        if (workspace.getWorkspace_name() == null || workspace.getWorkspace_name().isEmpty()) {
-            throw new IllegalArgumentException("Le nom du workspace est obligatoire.");
-        }
         return workspaceRepository.save(workspace);
     }
 
@@ -39,11 +34,11 @@ public class WorkspaceService {
 
     public Workspace updateWorkspace(String workspaceId, Workspace updatedWorkspace) {
         return workspaceRepository.findById(workspaceId).map(existingWorkspace -> {
-            if (updatedWorkspace.getWorkspace_name() != null) {
-                existingWorkspace.setWorkspace_name(updatedWorkspace.getWorkspace_name());
+            if (updatedWorkspace.getWorkspaceName () != null) {
+                existingWorkspace.setWorkspaceName (updatedWorkspace.getWorkspaceName ());
             }
-            if (updatedWorkspace.getWorkspace_description() != null) {
-                existingWorkspace.setWorkspace_description(updatedWorkspace.getWorkspace_description());
+            if (updatedWorkspace.getWorkspaceDescription () != null) {
+                existingWorkspace.setWorkspaceDescription (updatedWorkspace.getWorkspaceDescription ());
             }
             if (updatedWorkspace.getWorkflows() != null) {
                 existingWorkspace.setWorkflows(updatedWorkspace.getWorkflows());
@@ -70,10 +65,11 @@ public class WorkspaceService {
         var users = userClient.fundAllUsersByWorkspace(workspaceId);
 
         return FullWorkspaceResponse.builder()
-                .Workspace_name(workspace.getWorkspace_name())
-                .Workspace_description(workspace.getWorkspace_description())
+                .Workspace_name(workspace.getWorkspaceName ())
+                .Workspace_description(workspace.getWorkspaceDescription ())
                 .Workflows(workspace.getWorkflows())
                 .users(users)
                 .build();
     }
+
 }

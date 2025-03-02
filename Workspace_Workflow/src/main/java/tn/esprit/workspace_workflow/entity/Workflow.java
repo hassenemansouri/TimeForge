@@ -1,37 +1,39 @@
 package tn.esprit.workspace_workflow.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tn.esprit.workspace_workflow.client.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection = "workflows")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Workflow {
     @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();
+
 
     @NotNull(message = "workflowName cannot be null")
+    @JsonProperty("workflowName")
     private String workflowName;
 
     @NotNull(message = "Steps cannot be null")
+    @JsonProperty("steps")
     private List<String> steps = new ArrayList<>();
 
     @NotNull(message = "collaborators cannot be null")
     @DBRef
     private List<User> collaborators = new ArrayList<>();
 
-    @NotNull(message = "creator cannot be null")
     @DBRef
     private User creator;
 
