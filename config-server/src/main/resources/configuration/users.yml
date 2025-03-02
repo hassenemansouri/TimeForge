@@ -29,17 +29,17 @@ spring:
   cloud:
     compatibility-verifier:
       enabled: false
-  zipkin:
-    base-url: http://localhost:9411
-  sleuth:
-    sampler:
-          probability: 1.0
+      zipkin:
+      base-url: http://localhost:9411
+      sleuth:
+           sampler:
+           probability: 1.0
 
   # Configuration du serveur de l'application
 
 # Exclure l'autoconfiguration JDBC car on utilise MongoDB
 
-management:
-  tracing:
-    sampling:
-      probability: 1.0
+    management:
+     tracing:
+         sampling:
+         probability: 0.0
