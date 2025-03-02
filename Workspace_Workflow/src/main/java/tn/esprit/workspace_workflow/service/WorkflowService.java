@@ -7,6 +7,7 @@ import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.repository.WorkflowRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -17,8 +18,12 @@ public class WorkflowService {
 
 
     public Workflow createWorkflow(Workflow workflow) {
+        if (workflow.getId() == null || workflow.getId().isEmpty()) {
+            workflow.setId( UUID.randomUUID().toString());
+        }
         return workflowRepository.save(workflow);
     }
+
 
     public Optional<Workflow> getWorkflowById(String workflowId) {
         return workflowRepository.findById(workflowId);

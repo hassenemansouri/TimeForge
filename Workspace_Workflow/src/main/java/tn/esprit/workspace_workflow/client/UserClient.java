@@ -13,5 +13,4 @@ public interface UserClient {
     List<User> fundAllUsersByWorkspace(@PathVariable("workspace-id") String workspaceId);
 
 
-
 }
