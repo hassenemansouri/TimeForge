@@ -25,7 +25,6 @@ The application is based on a **microservices architecture** with the following 
 
 ## ⚙️ Installation and Configuration
 ### 📌 Prerequisites
-- ✅ **Angular 19+**
 - ✅ **Java 17+**
 - ✅ **Spring Boot**
 - ✅ **Docker & Docker Compose**
