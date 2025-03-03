@@ -7,6 +7,7 @@ import tn.esprit.project_task.entity.Task;
 import tn.esprit.project_task.repository.TaskRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -37,4 +38,8 @@ public class TaskImpl implements IServiceTask{
         return taskRepository.save(task);
 
     }
+    public Optional<Task> getTaskById(String TaskId) {
+        return taskRepository.findById(TaskId);
+    }
+
 }

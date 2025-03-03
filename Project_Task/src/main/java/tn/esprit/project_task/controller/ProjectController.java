@@ -42,7 +42,15 @@ public class ProjectController {
         Project p = service.modifyProject(project);
         return p;
     }
-
-
+    @GetMapping("/search/keyword")
+    public List<Project> searchByTitleKeyword(@RequestParam String keyword) {
+        return service.findByTitleContainingIgnoreCase(keyword);
+    }
+    @GetMapping("/getProjectById/{ProjectId}")
+    public ResponseEntity<Project> getWorkflowById(@PathVariable String ProjectId) {
+        return service.getProjectById(ProjectId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }
