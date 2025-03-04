@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.notification_message_collaboration.FullCollaborationResponse;
 import tn.esprit.notification_message_collaboration.Service.ICollaboration;
 import tn.esprit.notification_message_collaboration.entity.Collaboration;
 import tn.esprit.notification_message_collaboration.entity.Message;
