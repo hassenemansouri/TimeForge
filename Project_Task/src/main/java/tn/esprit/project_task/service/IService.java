@@ -8,10 +8,11 @@ import java.util.Optional;
 
 public interface IService {
     Project addProject(Project project);
-    //List<Project> findAllProjects();
-   // void deleteProject(String projet_id);
-    //Project modifyProject(Project project);
-
+    List<Project> findAllProjects();
+    void deleteProject(String projet_id);
+    Project modifyProject(Project project);
+    List<Project> findByTitleContainingIgnoreCase(String keyword);
+    Optional<Project> getProjectById(String ProjectId);
 
 
 }

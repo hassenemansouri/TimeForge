@@ -60,6 +60,17 @@ The API is documented using **Swagger**.
 ## 🤝 Contributing
 Contributions are welcome!
 
+## 👥 Contributors
+👤 **Houssem Ellouze** -
+👤 **Hassene Mansouri** -
+👤 **Med Mansour Taleb** -
+👤 **Mohamed Wassim Bahriya Lasghar** -
+👤 **Mahdi Mzoughi**  
+-
+💡 Contributions, ideas, or improvements? Open an **issue** or submit a **pull request**!
+
+---
+
 1. 🍴 **Fork** the project
 2. 🌱 Create a new branch (`feature/my-feature`)
 3. 💾 Commit your changes (`git commit -m 'Added my feature'`)
