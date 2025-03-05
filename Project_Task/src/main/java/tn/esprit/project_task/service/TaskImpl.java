@@ -29,5 +29,10 @@ public class TaskImpl implements IServiceTask{
     public void deleteTask(String id_task) {
         taskRepository.deleteById(id_task);
     }
+    public Task modifyTask(Task task) {
+
+        return taskRepository.save(task);
+
+    }
 
 }

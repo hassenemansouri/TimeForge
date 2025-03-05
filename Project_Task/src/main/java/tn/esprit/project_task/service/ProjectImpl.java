@@ -32,6 +32,11 @@ public class ProjectImpl implements IService{
     public void deleteProject(String projet_id) {
         projectRepository.deleteById(projet_id);
     }
+    public Project modifyProject(Project project) {
+
+        return projectRepository.save(project);
+    }
+
 
     public FullProjectResponse findProjectsWithUsers(String projet_id) {
         var project = projectRepository.findById(projet_id)

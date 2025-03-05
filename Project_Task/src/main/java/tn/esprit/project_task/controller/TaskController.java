@@ -35,5 +35,10 @@ public class TaskController {
     public void deleteTask(@PathVariable String id) {
         taskService.deleteTask(id);
     }
+    @PutMapping("/modify-task")
+    public Task modifyTask(@RequestBody Task t) {
+        Task task = taskService.modifyTask(t);
+        return task;
+    }
 
 }

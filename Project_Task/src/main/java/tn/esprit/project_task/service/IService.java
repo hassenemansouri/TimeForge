@@ -11,6 +11,7 @@ public interface IService {
     List<Project> getAllProjects();
     void deleteProject(String projet_id);
     Optional<Project> getProjectById(String projet_id);
+    Project modifyProject(Project project);
 
 
 }
