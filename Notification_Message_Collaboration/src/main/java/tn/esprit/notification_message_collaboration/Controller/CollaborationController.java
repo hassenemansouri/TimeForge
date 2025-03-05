@@ -1,35 +1,62 @@
 package tn.esprit.notification_message_collaboration.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.notification_message_collaboration.FullCollaborationResponse;
-import tn.esprit.notification_message_collaboration.Service.CollaborationImpl;
+import tn.esprit.notification_message_collaboration.Service.ICollaboration;
 import tn.esprit.notification_message_collaboration.entity.Collaboration;
+import tn.esprit.notification_message_collaboration.entity.Message;
 
 import java.util.List;
-
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/collaborations")
-//http://localhost:8300/timeforge/swagger-ui/index.html#/
+@AllArgsConstructor
 public class CollaborationController {
-    @Autowired
-    private CollaborationImpl service;
 
+    private final ICollaboration collaborationService;
 
     @PostMapping("/add")
-    public void addCollaboration(@RequestBody Collaboration collaboration) {  // Ajout de @RequestBody pour Swagger
-        service.addCollaboration ( collaboration );
+    public ResponseEntity<Void> addCollaboration(@RequestBody Collaboration collaboration) {
+        collaborationService.addCollaboration(collaboration);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
-    public List<Collaboration> findAllCollaborations() {
-
-        return service.findAllCollaborations ();
+    public ResponseEntity<List<Collaboration>> findAllCollaborations() {
+        return ResponseEntity.ok(collaborationService.findAllCollaborations());
     }
-    @GetMapping("WithUsers/{collaboration-id}")
-    public ResponseEntity<FullCollaborationResponse> findCollaborations(@PathVariable("collaboration-id") String collaboration_id){
-        return ResponseEntity.ok (service.findCollaborationsWithUsers(collaboration_id));
 
+    @GetMapping("/search/title")
+    public ResponseEntity<List<Collaboration>> findByChatTitle(@RequestParam String chatTitle) {
+        return ResponseEntity.ok(collaborationService.findByChatTitle(chatTitle));
+    }
+
+    @GetMapping("/search/participant")
+    public ResponseEntity<List<Collaboration>> findByParticipant(@RequestParam String userId) {
+        return ResponseEntity.ok(collaborationService.findByParticipant(userId));
+    }
+
+    @PostMapping("/{collaborationId}/messages")
+    public ResponseEntity<Void> addMessageToCollaboration(
+            @PathVariable String collaborationId,
+            @RequestBody Message message) {
+        collaborationService.addMessageToCollaboration(collaborationId, message);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping("/update/{collaborationId}")
+    public ResponseEntity<Void> updateCollaboration(
+            @PathVariable String collaborationId,
+            @RequestBody Collaboration updatedCollaboration) {
+        collaborationService.updateCollaboration(collaborationId, updatedCollaboration);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/delete/{collaborationId}")
+    public ResponseEntity<Void> deleteCollaboration(@PathVariable String collaborationId) {
+        collaborationService.deleteCollaboration(collaborationId);
+        return ResponseEntity.noContent().build();
     }
 }

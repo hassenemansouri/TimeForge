@@ -16,11 +16,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reward {
     @Id
-    private int id;
+    private String id;
 
     private String type;
     private String description;
     private Date dateAwarded;
-    @DBRef
-    private Goal goal;
+
 }
