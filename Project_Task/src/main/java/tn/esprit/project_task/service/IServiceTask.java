@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IServiceTask {
-    Task addTask(Task task);
-    List<Task> findAllTasks();
+    Task createTask(Task task) ;
+    List<Task> getAllTasks();
     void deleteTask(String id_task);
-    Task modifyTask(Task task);
-    Optional<Task> getTaskById(String TasktId);
+    Optional<Task> getTaskById(String id_task);
 
 }

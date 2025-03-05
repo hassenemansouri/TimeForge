@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends MongoRepository<Project, String> {
-    List<Project> findProjectContainingIgnoreCase(String keyword);
 
 }

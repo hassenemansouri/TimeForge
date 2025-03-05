@@ -15,13 +15,7 @@ import java.time.LocalDateTime;
 @Builder
 @Document(collection = "tasks")
 public class Task {
-    public enum Priority {
-        LOW, MEDIUM, HIGH
-    }
 
-    public enum Status {
-        PENDING, IN_PROGRESS, COMPLETED
-    }
 
     @Id
     private String id_task;
@@ -38,11 +32,10 @@ public class Task {
 
     @FutureOrPresent(message = "Due date must be in the present or future")
     private LocalDateTime dueDate;
-    private Priority priority;
+    private TaskPriority priority = TaskPriority.HIGH;
 
-    private Status status = Status.PENDING;
+    private TaskStatus status = TaskStatus.TODO;
 
-    private String history;
     @DBRef
     private Project project;
 

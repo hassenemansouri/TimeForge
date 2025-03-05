@@ -17,34 +17,22 @@ public class ProjectImpl implements IService{
 
     private ProjectRepository projectRepository;
     private UserClient userClient;
-
-    public Project addProject(Project project) {
-
-        return projectRepository.save(project);
-
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
     }
 
-    public List<Project> findAllProjects() {
+    public Optional<Project> getProjectById(String projet_id) {
+        return projectRepository.findById(projet_id);
+    }
 
-        return projectRepository.findAll();
+    public Project createProject(Project project) {
+        return projectRepository.save(project);
     }
 
     public void deleteProject(String projet_id) {
         projectRepository.deleteById(projet_id);
-
-    }
-    public Project modifyProject(Project project) {
-
-        return projectRepository.save(project);
     }
 
-    @Override
-    public List<Project> findByTitleContainingIgnoreCase(String keyword) {
-        return projectRepository.findProjectContainingIgnoreCase(keyword);
-    }
-    public Optional<Project> getProjectById(String ProjectId) {
-        return projectRepository.findById(ProjectId);
-    }
     public FullProjectResponse findProjectsWithUsers(String projet_id) {
         var project = projectRepository.findById(projet_id)
                 .orElse(Project.builder()

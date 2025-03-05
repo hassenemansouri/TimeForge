@@ -14,32 +14,20 @@ import java.util.Optional;
 public class TaskImpl implements IServiceTask{
     private TaskRepository taskRepository;
     private UserClient userClient;
-    @Override
-    public Task addTask(Task task) {
-
-        return taskRepository.save(task);
-    }
-
-    @Override
-    public List<Task> findAllTasks() {
-
+    public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
-    @Override
+    public Optional<Task> getTaskById(String id_task) {
+        return taskRepository.findById(id_task);
+    }
+
+    public Task createTask(Task task) {
+        return taskRepository.save(task);
+    }
+
     public void deleteTask(String id_task) {
         taskRepository.deleteById(id_task);
-
-    }
-
-    @Override
-    public Task modifyTask(Task task) {
-
-        return taskRepository.save(task);
-
-    }
-    public Optional<Task> getTaskById(String TaskId) {
-        return taskRepository.findById(TaskId);
     }
 
 }

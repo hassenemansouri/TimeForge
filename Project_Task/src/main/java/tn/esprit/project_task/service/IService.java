@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IService {
-    Project addProject(Project project);
-    List<Project> findAllProjects();
+    Project createProject(Project project);
+    List<Project> getAllProjects();
     void deleteProject(String projet_id);
-    Project modifyProject(Project project);
-    List<Project> findByTitleContainingIgnoreCase(String keyword);
-    Optional<Project> getProjectById(String ProjectId);
+    Optional<Project> getProjectById(String projet_id);
 
 
 }

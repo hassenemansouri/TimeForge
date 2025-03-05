@@ -7,41 +7,33 @@ import tn.esprit.project_task.entity.Task;
 import tn.esprit.project_task.service.TaskImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tasks")
 //http://localhost:8400/timeforge/swagger-ui/index.html#/
 @AllArgsConstructor
 public class TaskController {
-    private TaskImpl service;
+    private TaskImpl taskService;
 
-    @PostMapping("/add")
-    public Task addTask(Task t) {
-
-        Task task = service.addTask(t);
-        return task;
-    }
-
-    @GetMapping()
+    @GetMapping
     public List<Task> getAllTasks() {
-        List<Task> listTasks =  service.findAllTasks ();
-        return listTasks;
+        return taskService.getAllTasks();
     }
-    @DeleteMapping("/remove-task/{id-task}")
-    public void removeTask(@PathVariable("id-task") String id_task) {
 
-        service.deleteTask(id_task);
+    @GetMapping("/{id}")
+    public Optional<Task> getTaskById(@PathVariable String id) {
+        return taskService.getTaskById(id);
     }
-    @PutMapping("/modify-task")
-    public Task modifyTask(@RequestBody Task t) {
-        Task task = service.modifyTask(t);
-        return task;
+
+    @PostMapping
+    public Task createTask(@RequestBody Task task) {
+        return taskService.createTask(task);
     }
-    @GetMapping("/getTaskById/{TaskId}")
-    public ResponseEntity<Task> getWorkspaceById(@PathVariable String TaskId) {
-        return service.getTaskById(TaskId)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+
+    @DeleteMapping("/{id}")
+    public void deleteTask(@PathVariable String id) {
+        taskService.deleteTask(id);
     }
 
 }

@@ -19,9 +19,7 @@ import java.util.List;
 @Builder
 @Document(collection = "projects")
 public class Project {
-    public enum Status {
-        PENDING, IN_PROGRESS, COMPLETED
-    }
+
     @Id
     private String projet_id;
     @NotNull(message = "Project title cannot be null")
@@ -35,9 +33,9 @@ public class Project {
     @FutureOrPresent(message = "Due date must be in the present or future")
     private LocalDateTime endDate;
 
-    private Status status = Status.IN_PROGRESS;
+    private ProjectStatus status = ProjectStatus.IN_PROGRESS;
     @DBRef
-    private User creator;
+    private User owner;
     @DBRef
     private List<Task> tasks;
    // public boolean inviteUser(User user) {
