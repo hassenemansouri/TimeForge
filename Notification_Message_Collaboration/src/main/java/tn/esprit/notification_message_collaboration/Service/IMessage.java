@@ -1,6 +1,8 @@
 package tn.esprit.notification_message_collaboration.Service;
 
 import tn.esprit.notification_message_collaboration.entity.Message;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

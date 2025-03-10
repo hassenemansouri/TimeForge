@@ -3,7 +3,7 @@ package tn.esprit.notification_message_collaboration.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import tn.esprit.notification_message_collaboration.entity.User;
+
 
 import java.util.List;
 

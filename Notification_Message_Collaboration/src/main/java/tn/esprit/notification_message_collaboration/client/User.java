@@ -1,4 +1,4 @@
-package tn.esprit.notification_message_collaboration.entity;
+package tn.esprit.notification_message_collaboration.client;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

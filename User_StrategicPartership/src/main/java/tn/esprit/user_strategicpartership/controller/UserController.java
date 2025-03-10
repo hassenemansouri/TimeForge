@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.service.UserService;
@@ -18,6 +19,14 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;  // Injection avec @Autowired
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable String id) {
+        return userService.getUserById(id)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @Operation(summary = "Ajouter un utilisateur")
     @PostMapping("/add")
@@ -59,10 +68,11 @@ public class UserController {
 
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
