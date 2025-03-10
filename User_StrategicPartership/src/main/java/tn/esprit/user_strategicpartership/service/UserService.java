@@ -1,6 +1,9 @@
 package tn.esprit.user_strategicpartership.service;
 
+import java.util.Optional;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
@@ -9,12 +12,13 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements IUser {
+public class UserService {
 
-    private UserRepository userRepository;  // Injection avec @Autowired
+    private  UserRepository userRepository;  // Injection avec @Autowired
 
-    public void addUser(User user) {
-        userRepository.save(user);
+
+    public User addUser(User user) {
+      return   userRepository.save(user);
     }
 
     public List<User> findAllUsers() {
@@ -29,12 +33,15 @@ public class UserServiceImpl implements IUser {
         return userRepository.findAllByGoalId(goalId);
     }
 
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
+    }
 
 
-    @Override
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
+
 
     public List<User> findUsersCollab(String collaborationId) {
         return userRepository.findAllByCollaborationId (collaborationId);

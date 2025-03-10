@@ -4,6 +4,7 @@ import tn.esprit.notification_message_collaboration.FullCollaborationResponse;
 import tn.esprit.notification_message_collaboration.entity.Collaboration;
 import tn.esprit.notification_message_collaboration.entity.Message;
 
+
 import java.util.List;
 
 public interface ICollaboration {

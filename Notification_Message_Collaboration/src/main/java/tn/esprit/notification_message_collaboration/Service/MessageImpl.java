@@ -1,6 +1,7 @@
 package tn.esprit.notification_message_collaboration.Service;
 
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import tn.esprit.notification_message_collaboration.entity.Message;
 import tn.esprit.notification_message_collaboration.entity.MessageStatus;
@@ -8,7 +9,6 @@ import tn.esprit.notification_message_collaboration.repository.MessageRepository
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class MessageImpl implements IMessage {

@@ -1,6 +1,7 @@
 package tn.esprit.project_task.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.project_task.entity.Task;
 import tn.esprit.project_task.service.TaskImpl;
@@ -36,4 +37,11 @@ public class TaskController {
         Task task = service.modifyTask(t);
         return task;
     }
+    @GetMapping("/getTaskById/{TaskId}")
+    public ResponseEntity<Task> getWorkspaceById(@PathVariable String TaskId) {
+        return service.getTaskById(TaskId)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }

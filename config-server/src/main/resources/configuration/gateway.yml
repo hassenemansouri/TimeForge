@@ -31,6 +31,11 @@ spring:
           predicates:
             - Path=/workspaces/**
 
+        - id: keycloak
+          uri: http://localhost:8500
+          predicates:
+            - Path=/workspaces/**
+
   config:
     import: optional:configserver:http://localhost:8888
 
