@@ -38,7 +38,13 @@ public class ProjectImpl implements IService{
         return projectRepository.save(project);
     }
 
-
+    @Override
+    public List<Project> findByTitleContainingIgnoreCase(String keyword) {
+        return projectRepository.findProjectContainingIgnoreCase(keyword);
+    }
+    public Optional<Project> getProjectById(String ProjectId) {
+        return projectRepository.findById(ProjectId);
+    }
     public FullProjectResponse findProjectsWithUsers(String projet_id) {
         var project = projectRepository.findById(projet_id)
                 .orElse(Project.builder()
