@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.notification_message_collaboration.client.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -26,7 +27,7 @@ public class Collaboration {
     private LocalDateTime lastUpdated; // Dernière mise à jour
 
     @DBRef
-    private List<tn.esprit.notification_message_collaboration.entity.User> participants; // Liste des utilisateurs impliqués
+    private List<User> participants; // Liste des utilisateurs impliqués
 
     @DBRef
     private List<Message> messages; // Liste des messages envoyés
