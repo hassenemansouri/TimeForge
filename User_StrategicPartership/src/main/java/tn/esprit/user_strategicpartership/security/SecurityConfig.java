@@ -1,28 +1,32 @@
 package tn.esprit.user_strategicpartership.security;
 
-import static org.springframework.security.config.Customizer.withDefaults;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
-
+import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+  @Autowired
+  private CorsConfigurationSource corsConfigurationSource;
   private final UserRepository userRepository;
 
   public SecurityConfig(UserRepository userRepository) {
@@ -48,15 +52,22 @@ public class SecurityConfig {
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
     http
-        .cors(withDefaults())  // Enable CORS with default configuration
-        .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF for simplicity (can be enabled later)
+        .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
+        .cors(cors -> cors.configurationSource(corsConfigurationSource))  // Configure CORS
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/register", "/auth/login").permitAll()  // Allow unauthenticated access to these endpoints
-            .anyRequest().authenticated()  // Require authentication for all other requests
-        );
+            .requestMatchers("/auth/register", "/auth/login", "/auth/forgot-password").permitAll()  // Public endpoints
+            .anyRequest().authenticated()  // Secure all other endpoints
+        )
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .httpBasic(Customizer.withDefaults());;
 
     return http.build();
   }
+
+
+
+
+
 }
