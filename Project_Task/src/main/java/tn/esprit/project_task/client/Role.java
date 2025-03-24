@@ -1,4 +1,4 @@
-package tn.esprit.workspace_workflow.client;
+package tn.esprit.project_task.client;
 
 public enum Role {
     MANAGER, EMPLOYEE

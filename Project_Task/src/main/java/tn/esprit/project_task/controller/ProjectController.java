@@ -29,7 +29,7 @@ public class ProjectController {
         return projectService.getProjectById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Project createProject(@RequestBody Project project) {
         return projectService.createProject(project);
     }

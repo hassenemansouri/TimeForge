@@ -21,16 +21,17 @@ public class ProjectImpl implements IService{
         return projectRepository.findAll();
     }
 
-    public Optional<Project> getProjectById(String projet_id) {
-        return projectRepository.findById(projet_id);
+    public Optional<Project> getProjectById(String id) {
+
+        return projectRepository.findById(id);
     }
 
     public Project createProject(Project project) {
         return projectRepository.save(project);
     }
 
-    public void deleteProject(String projet_id) {
-        projectRepository.deleteById(projet_id);
+    public void deleteProject(String id) {
+        projectRepository.deleteById(id);
     }
     public Project modifyProject(Project project) {
 

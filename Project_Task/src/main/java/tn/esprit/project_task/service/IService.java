@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface IService {
     Project createProject(Project project);
     List<Project> getAllProjects();
-    void deleteProject(String projet_id);
-    Optional<Project> getProjectById(String projet_id);
+    void deleteProject(String id);
+    Optional<Project> getProjectById(String id);
     Project modifyProject(Project project);
 
 

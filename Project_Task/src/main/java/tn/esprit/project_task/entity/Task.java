@@ -34,8 +34,6 @@ public class Task {
     private LocalDateTime dueDate;
     private TaskPriority priority = TaskPriority.HIGH;
 
-    private TaskStatus status = TaskStatus.TODO;
-
     @DBRef
     private Project project;
 
