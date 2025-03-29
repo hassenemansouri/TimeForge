@@ -44,3 +44,15 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
+    com:
+      twilio: DEBUG
+
+twilio:
+  account:
+    sid: AC05c9b78bce2f77e9d43cdf68154fb9d1
+  auth:
+    token: a4ded814d7a028d485cf55dd8a1a995a
+  phone:
+    number: +19516678378
+
+
