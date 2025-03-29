@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.service.WorkflowService;
+import tn.esprit.workspace_workflow.service.TwilioSmsService;
 import tn.esprit.workspace_workflow.client.User;
 import java.util.List;
 
@@ -15,16 +16,19 @@ import java.util.List;
 public class WorkflowController {
 
     private final WorkflowService workflowService;
-
+    private final TwilioSmsService twilioSmsService;
 
     @PostMapping("/create")
     public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
         try {
             Workflow createdWorkflow = workflowService.createWorkflow(workflow);
+
+            // Envoi d'un SMS lors de la création du workflow
+            twilioSmsService.sendSms("+21694415244", "Un nouveau workflow a été créé : " + createdWorkflow.getWorkflowName ());
+
             return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkflow);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
@@ -40,12 +44,15 @@ public class WorkflowController {
         return ResponseEntity.ok(workflowService.getAllWorkflows());
     }
 
-
     @PutMapping("/update/{workflowId}")
     public ResponseEntity<?> updateWorkflow(@PathVariable String workflowId,
                                             @RequestBody Workflow workflow) {
         try {
             Workflow updatedWorkflow = workflowService.updateWorkflow(workflowId, workflow);
+
+            // Envoi d'un SMS lors de la mise à jour du workflow
+            twilioSmsService.sendSms("+21694415244", "Le workflow a été mis à jour : " + updatedWorkflow.getWorkflowName ());
+
             return ResponseEntity.ok(updatedWorkflow);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -53,11 +60,14 @@ public class WorkflowController {
         }
     }
 
-
     @DeleteMapping("/delete/{workflowId}")
     public ResponseEntity<Void> deleteWorkflow(@PathVariable String workflowId) {
         try {
             workflowService.deleteWorkflow(workflowId);
+
+            // Envoi d'un SMS lors de la suppression du workflow
+            twilioSmsService.sendSms("+21694415244", "Un workflow a été supprimé avec l'ID : " + workflowId);
+
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -74,6 +84,4 @@ public class WorkflowController {
         Workflow updatedWorkflow = workflowService.assignCollaborators(workflowId, collaborators);
         return ResponseEntity.ok(updatedWorkflow);
     }
-
-
 }

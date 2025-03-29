@@ -6,11 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.workspace_workflow.FullWorkspaceResponse;
-import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.service.WorkspaceService;
-import java.util.List;
+import tn.esprit.workspace_workflow.service.TwilioSmsService;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/workspaces")
@@ -19,21 +19,25 @@ import java.util.List;
 @Slf4j
 public class WorkspaceController {
 
-    private WorkspaceService workspaceService;
+    private final WorkspaceService workspaceService;
+    private final TwilioSmsService twilioSmsService;
 
     @PostMapping("/create")
     public ResponseEntity<Workspace> createWorkspace(@RequestBody Workspace workspace) {
-        System.out.println("WorkspaceName: " + workspace.getWorkspaceName () +
-                " WorkspaceDescription: " + workspace.getWorkspaceDescription ());
+        System.out.println("WorkspaceName: " + workspace.getWorkspaceName() +
+                " WorkspaceDescription: " + workspace.getWorkspaceDescription());
 
-        if (workspace.getWorkspaceName ()== null || workspace.getWorkspaceDescription ()== null) {
+        if (workspace.getWorkspaceName() == null || workspace.getWorkspaceDescription() == null) {
             return ResponseEntity.badRequest().body(null);
         }
 
-        Workspace savedWorkspace = workspaceService.createWorkspace (workspace);
+        Workspace savedWorkspace = workspaceService.createWorkspace(workspace);
+
+        // Envoi d'un SMS lors de la création d'un espace de travail
+        twilioSmsService.sendSms("+21694415244", "Un nouvel espace de travail a été créé : " + savedWorkspace.getWorkspaceName());
+
         return ResponseEntity.ok(savedWorkspace);
     }
-
 
     @GetMapping("/getWorkspaceById/{workspaceId}")
     public ResponseEntity<Workspace> getWorkspaceById(@PathVariable String workspaceId) {
@@ -47,12 +51,15 @@ public class WorkspaceController {
         return ResponseEntity.ok(workspaceService.getAllWorkspaces());
     }
 
-
     @PutMapping("/update/{workspaceId}")
     public ResponseEntity<?> updateWorkspace(@PathVariable String workspaceId,
                                              @RequestBody Workspace workspace) {
         try {
             Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, workspace);
+
+            // Envoi d'un SMS lors de la mise à jour de l'espace de travail
+            twilioSmsService.sendSms("+21694415244", "L'espace de travail a été mis à jour : " + updatedWorkspace.getWorkspaceName());
+
             return ResponseEntity.ok(updatedWorkspace);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -60,17 +67,19 @@ public class WorkspaceController {
         }
     }
 
-
     @DeleteMapping("/delete/{workspaceId}")
     public ResponseEntity<Void> deleteWorkspace(@PathVariable String workspaceId) {
         try {
             workspaceService.deleteWorkspace(workspaceId);
+
+            // Envoi d'un SMS lors de la suppression de l'espace de travail
+            twilioSmsService.sendSms("+21694415244", "Un espace de travail a été supprimé avec l'ID : " + workspaceId);
+
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @GetMapping("/withUsers/{workspaceId}")
     public ResponseEntity<FullWorkspaceResponse> findWorkspaceWithUsers(@PathVariable String workspaceId) {
