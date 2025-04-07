@@ -23,4 +23,11 @@ public interface IService {
     Reward modifierReward(String id, Reward reward);
     Optional<Reward> getRewardById(String id);
     List<Reward> getAllRewards();
-}
+    Categorie addCategorie(Categorie categorie);
+    List<Categorie> getAllCategories();
+    Optional<Categorie> getCategorieById(String id);
+    Categorie updateCategorie(String id, Categorie categorie);
+    void deleteCategorie(String id);
+    Date calculateEndDate(Date startDate, List<Categorie> categories);
+
+    public Goal ajouterGoalAvecNouvellesCategories(Goal goal, List<Categorie> categoriesFromRequest);}

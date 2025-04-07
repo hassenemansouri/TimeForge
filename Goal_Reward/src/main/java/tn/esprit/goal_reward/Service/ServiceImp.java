@@ -24,7 +24,6 @@ public class ServiceImp implements IService {
     private UserClient userClient;
     private RewardRepository rewardRepository;
     private CategorieRepository categorieRepository;
-
     // Fonction existante pour ajouter un Goal
     public Goal ajouterGoal(Goal goal) {
         if (goal == null || goal.getTitle() == null || goal.getTitle().isEmpty()) {
@@ -44,7 +43,7 @@ public class ServiceImp implements IService {
 
 
 
-    private Date calculateEndDate(Date startDate, List<Categorie> categories) {
+    public Date calculateEndDate(Date startDate, List<Categorie> categories) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
@@ -159,4 +158,66 @@ public class ServiceImp implements IService {
     public List<Reward> getAllRewards() {
         return rewardRepository.findAll();
     }
+
+    @Override
+    public Categorie addCategorie(Categorie categorie) {
+        return categorieRepository.save(categorie);
+    }
+
+    @Override
+    public List<Categorie> getAllCategories() {
+        return categorieRepository.findAll();
+    }
+
+    @Override
+    public Optional<Categorie> getCategorieById(String id) {
+        return categorieRepository.findById(id);
+    }
+
+    @Override
+    public Categorie updateCategorie(String id, Categorie categorie) {
+        if (categorieRepository.existsById(id)) {
+            categorie.setCategorie_id(id);
+            return categorieRepository.save(categorie);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteCategorie(String id) {
+        categorieRepository.deleteById(id);
+    }
+    public Goal ajouterGoalAvecNouvellesCategories(Goal goal, List<Categorie> categoriesFromRequest) {
+        if (goal == null || goal.getTitle() == null || goal.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Le titre du goal est obligatoire.");
+        }
+
+        if (goal.getDescription() == null || goal.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("La description du goal est obligatoire.");
+        }
+
+        // Ajouter ou récupérer les catégories existantes
+        List<Categorie> categoriesToAssign = categoriesFromRequest.stream().map(categorie -> {
+            if (categorie.getCategorie_id() != null && categorieRepository.findById(categorie.getCategorie_id()).isPresent()) {
+                return categorieRepository.findById(categorie.getCategorie_id()).get();
+            } else {
+                return categorieRepository.save(Categorie.builder()
+                        .libelle(categorie.getLibelle())
+                        .description(categorie.getDescription())
+                        .build());
+            }
+        }).toList();
+
+        // Assigner les catégories au goal
+        goal.setCategories(categoriesToAssign);
+
+        // Calcul de la date de fin en fonction des catégories
+        if (goal.getStartDate() != null && goal.getEndDate() == null) {
+            goal.setEndDate(calculateEndDate(goal.getStartDate(), categoriesToAssign));
+        }
+
+        return goalRepository.save(goal);
+    }
+
 }
+

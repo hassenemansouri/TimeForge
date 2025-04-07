@@ -1,5 +1,6 @@
 package tn.esprit.goal_reward.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.goal_reward.Entity.Categorie;
 import tn.esprit.goal_reward.Entity.Goal;
+
 import tn.esprit.goal_reward.Entity.Reward;
 import tn.esprit.goal_reward.FullGoalResponse;
+import tn.esprit.goal_reward.Repository.CategorieRepository;
+import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Service.IService;
 
 import java.util.HashMap;
@@ -25,6 +29,11 @@ public class TimeForgeController {
 
     @Autowired
     IService service;
+    @Autowired
+    private CategorieRepository categorieRepository;
+
+    @Autowired
+    private GoalRepository goalRepository;
 
     @PostMapping("/ajouterGoal")
     public ResponseEntity<?> ajouterGoal(@Valid @RequestBody Goal goal) {
@@ -100,6 +109,68 @@ public class TimeForgeController {
     @GetMapping("/getAllRewards")
     public List<Reward> getAllRewards() {
         return service.getAllRewards();
+    }
+
+
+    @PostMapping("/add")
+    public ResponseEntity<Categorie> addCategorie(@RequestBody Categorie categorie) {
+        return ResponseEntity.ok(service.addCategorie(categorie));
+    }
+
+    @GetMapping("/getAll")
+    public List<Categorie> getAllCategories() {
+        return service.getAllCategories();
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Optional<Categorie>> getCategorie(@PathVariable String id) {
+        return ResponseEntity.ok(service.getCategorieById(id));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Categorie> updateCategorie(@PathVariable String id, @RequestBody Categorie categorie) {
+        return ResponseEntity.ok(service.updateCategorie(id, categorie));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteCategorie(@PathVariable String id) {
+        service.deleteCategorie(id);
+    }
+    @PostMapping("/ajouterGoalAvecNouvellesCategories")
+    public ResponseEntity<?> ajouterGoalAvecNouvellesCategories(@RequestBody Map<String, Object> payload) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Extraction et conversion du goal
+            Goal goal = mapper.convertValue(payload.get("goal"), Goal.class);
+
+            // Extraction et conversion des catégories
+            List<Categorie> categories = ((List<?>) payload.get("categories"))
+                    .stream()
+                    .map(cat -> mapper.convertValue(cat, Categorie.class))
+                    .toList();
+
+            // Sauvegarder les catégories
+            List<Categorie> savedCategories = categories.stream()
+                    .map(categorieRepository::save)
+                    .toList();
+
+            // Lier au goal
+            goal.setCategories(savedCategories);
+
+            // Calcul automatique de la endDate si nécessaire
+            if (goal.getStartDate() != null && goal.getEndDate() == null) {
+                goal.setEndDate(service.calculateEndDate(goal.getStartDate(), savedCategories));
+            }
+
+            // Sauvegarder le goal
+            Goal savedGoal = goalRepository.save(goal);
+
+            return ResponseEntity.ok(savedGoal);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur : " + e.getMessage());
+        }
     }
 
 }
