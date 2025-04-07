@@ -32,6 +32,11 @@ spring:
           enabled: false
   mvc:
     log-request-details: true
+  servlet:
+    multipart:
+          enabled: true
+          max-file-size: 10MB
+          max-request-size: 10MB
 
 management:
   tracing:
@@ -46,6 +51,15 @@ logging:
     org.hibernate.SQL: DEBUG
     com:
       twilio: DEBUG
+    org:
+      springframework:
+              web:
+                multipart: DEBUG
+              apache:
+              tomcat:
+                util:
+                  http:
+                    fileupload: DEBUG
 
 twilio:
   account:
@@ -54,5 +68,11 @@ twilio:
     token: a4ded814d7a028d485cf55dd8a1a995a
   phone:
     number: +19516678378
+
+
+file:
+  path: uploads
+
+
 
 
