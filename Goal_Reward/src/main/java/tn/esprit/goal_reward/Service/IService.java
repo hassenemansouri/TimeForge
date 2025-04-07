@@ -1,9 +1,11 @@
 package tn.esprit.goal_reward.Service;
 
+import tn.esprit.goal_reward.Entity.Categorie;
 import tn.esprit.goal_reward.Entity.Goal;
 import tn.esprit.goal_reward.Entity.Reward;
 import tn.esprit.goal_reward.FullGoalResponse;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
