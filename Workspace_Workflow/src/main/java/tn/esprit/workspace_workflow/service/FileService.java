@@ -22,25 +22,23 @@ public class FileService implements IFile {
 
     @Override
     public String save(MultipartFile file) {
-        // Define the directory where files will be stored
+
         String dir = System.getProperty ( "user.dir" ) + "/" + filePath;
         File directory = new File ( dir );
 
-        // Create the directory if it does not exist
         if (!directory.exists ()) {
             directory.mkdirs ();
         }
 
-        // Define the file path including file name
+
         File targetFile = new File ( dir + "/" + file.getOriginalFilename () );
         try {
-            // Save the file to the target location
+
             file.transferTo ( targetFile );
         } catch (IOException e) {
             throw new RuntimeException ( "Failed to store file " + file.getOriginalFilename (), e );
         }
 
-        // Return the name of the saved file
         return file.getOriginalFilename ();
     }
 
@@ -51,7 +49,7 @@ public class FileService implements IFile {
         Path path = Paths.get ( dir );
 
         try {
-            // Create a UrlResource for the file
+
             Resource resource = new UrlResource ( path.toUri () );
             if (resource.exists () || resource.isReadable ()) {
                 return resource;

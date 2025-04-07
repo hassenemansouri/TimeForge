@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.goal_reward.Entity.Categorie;
 import tn.esprit.goal_reward.Entity.Goal;
 import tn.esprit.goal_reward.Entity.Reward;
 import tn.esprit.goal_reward.FullGoalResponse;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/goals")
 @AllArgsConstructor
+
 public class TimeForgeController {
 
     @Autowired
@@ -33,6 +35,7 @@ public class TimeForgeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @GetMapping("/getall")
     public List<Goal> getAllGoals() {
