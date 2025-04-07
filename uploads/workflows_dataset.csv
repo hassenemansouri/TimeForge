@@ -1,0 +1,11 @@
+workflowName,steps,actions
+"Recruitment Workflow,""Identify the need, Job posting, Application screening, Interviews & assessments"",""Define job requirements, Write job descriptions, Post job on platforms, Review applications, Conduct interviews, Perform assessments"""
+"IT Ticket Management Workflow,""Ticket creation, Ticket classification, Assign to technician/team, Analysis & diagnosis"",""Create ticket, Categorize ticket, Assign technician, Analyze issue, Diagnose problem"""
+"New Product Launch Workflow,""Idea generation & market research, Product design & development, Validation & user testing"",""Brainstorm product ideas, Conduct surveys, Analyze market trends, Design prototype, Develop product, Conduct user testing"""
+"Sales Process Workflow,""Lead generation, Initial contact, Presentation & demonstration"",""Generate leads, Research leads, Send outreach emails, Schedule meetings, Conduct presentations, Demonstrate product"""
+"Invoice Processing Workflow,""Invoice reception, Internal approval, Accounting entry"",""Receive invoices, Verify invoice details, Approve invoice, Enter details into accounting system, Process payment"""
+"Customer Onboarding Workflow,""Welcome email, Account setup, Product training, Support introduction"",""Send welcome email, Create user account, Set up initial preferences, Provide training materials, Introduce support team"""
+"Project Management Workflow,""Project planning, Resource allocation, Execution, Monitoring & control, Project closure"",""Define project scope, Assign resources, Execute tasks, Track progress, Finalize project"""
+"Employee Performance Review Workflow,""Goal setting, Performance tracking, Feedback collection, Review meeting, Final evaluation"",""Set performance goals, Monitor progress, Collect feedback, Conduct performance review, Evaluate final performance"""
+"Event Planning Workflow,""Concept design, Vendor selection, Marketing & promotion, Event execution, Post-event follow-up"",""Design event concept, Choose vendors, Market event, Set up event, Conduct event, Send thank-you notes"""
+"Product Support Workflow,""Ticket creation, Issue categorization, Solution search, Resolution, Customer feedback"",""Create support ticket, Categorize issue, Search for solutions, Provide resolution, Request customer feedback"""
