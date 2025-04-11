@@ -29,9 +29,11 @@ public class Project {
     @NotNull(message = "Project title cannot be null")
     @Size(min = 3, max = 50, message = "Project title must be between 3 and 50 characters")
     private String title;
+
     @NotNull(message = "Project description cannot be null")
     @Size(min = 10, message = "Description must be at least 10 characters")
     private String description;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startDate = new Date();
 

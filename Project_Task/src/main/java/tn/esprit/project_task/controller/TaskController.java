@@ -1,7 +1,6 @@
 package tn.esprit.project_task.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.project_task.entity.Task;
 import tn.esprit.project_task.service.TaskImpl;
@@ -26,7 +25,7 @@ public class TaskController {
         return taskService.getTaskById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public Task createTask(@RequestBody Task task) {
         return taskService.createTask(task);
     }
@@ -36,9 +35,12 @@ public class TaskController {
         taskService.deleteTask(id);
     }
     @PutMapping("/modify-task")
-    public Task modifyTask(@RequestBody Task t) {
-        Task task = taskService.modifyTask(t);
-        return task;
+    public Task modifyTask(@RequestBody Task task) {
+        Task t = taskService.modifyTask(task);
+        return t;
     }
-
+    @GetMapping("/column/{columnId}")
+    public List<Task> getTasksByColumnId(@PathVariable String columnId) {
+        return taskService.getTasksByColumnId(columnId);
+    }
 }

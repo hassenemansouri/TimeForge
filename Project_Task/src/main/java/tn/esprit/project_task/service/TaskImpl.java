@@ -34,5 +34,7 @@ public class TaskImpl implements IServiceTask{
         return taskRepository.save(task);
 
     }
-
+    public List<Task> getTasksByColumnId(String columnId) {
+        return taskRepository.findByColumnId(columnId);
+    }
 }
