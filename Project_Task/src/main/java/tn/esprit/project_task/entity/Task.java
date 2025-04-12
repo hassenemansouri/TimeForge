@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +38,8 @@ public class Task {
     private Date dueDate;
     private TaskPriority priority = TaskPriority.HIGH;
     private String columnId;
+    private List<String> history;
+
     @DBRef
     private Project project;
 }
