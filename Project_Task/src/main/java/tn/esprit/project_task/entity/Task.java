@@ -1,5 +1,6 @@
 package tn.esprit.project_task.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +23,7 @@ import java.util.List;
 public class Task {
 
     @Id
+    @JsonProperty("_id")
     private String _id;
 
     @NotNull(message = "Task name cannot be null")

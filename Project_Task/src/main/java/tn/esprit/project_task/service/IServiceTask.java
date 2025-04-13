@@ -10,6 +10,6 @@ public interface IServiceTask {
     List<Task> getAllTasks();
     void deleteTask(String id_task);
     Optional<Task> getTaskById(String id_task);
-    Task modifyTask(Task task);
+    Task update(String id, Task task) ;
     public List<Task> getTasksByColumnId(String columnId);
 }

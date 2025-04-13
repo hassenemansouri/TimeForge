@@ -6,6 +6,8 @@ import tn.esprit.project_task.client.UserClient;
 import tn.esprit.project_task.entity.Task;
 import tn.esprit.project_task.repository.TaskRepository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,16 +25,19 @@ public class TaskImpl implements IServiceTask{
     }
 
     public Task createTask(Task task) {
-        return taskRepository.save(task);
+        task.setCreatedAt(new Date());
+        task.setHistory(task.getHistory() != null ? task.getHistory() : new ArrayList<>());
+        return taskRepository.save(task); // Très important : retourne l’objet sauvegardé
     }
 
     public void deleteTask(String id_task) {
         taskRepository.deleteById(id_task);
     }
-    public Task modifyTask(Task task) {
-
+    public Task update(String id, Task task) {
+        Task existing = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found"));
+        task.set_id(id);
         return taskRepository.save(task);
-
     }
     public List<Task> getTasksByColumnId(String columnId) {
         return taskRepository.findByColumnId(columnId);
