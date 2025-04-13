@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import tn.esprit.project_task.client.User;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -44,4 +45,6 @@ public class Task {
 
     @DBRef
     private Project project;
+    @DBRef
+    private User assignedTo;
 }

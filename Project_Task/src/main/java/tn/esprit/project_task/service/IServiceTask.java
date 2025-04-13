@@ -12,4 +12,5 @@ public interface IServiceTask {
     Optional<Task> getTaskById(String id_task);
     Task update(String id, Task task) ;
     public List<Task> getTasksByColumnId(String columnId);
+   // public List<Task> getTasksByProjectId(String projectId);
 }

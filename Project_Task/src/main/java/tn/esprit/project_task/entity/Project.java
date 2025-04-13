@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import tn.esprit.project_task.client.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -46,15 +47,17 @@ public class Project {
     @DBRef
     private User owner;
     @DBRef
-    private List<Task> tasks;
-   // public boolean inviteUser(User user) {
-        //if (this.creator != null && this.creator.isManager()) {
-      //      if (user != null && !collaborators.contains(user) && (user.isManager() || user.isEmployee())) {
-    //            collaborators.add(user);
-      //          return true;
-      //      }
-      //  }
-     //   return false;
-   //}
+    private List<User> members = new ArrayList<>();
+
+    public boolean inviteUser(User user) {
+        if (this.owner != null && this.owner.isManager()) {
+            if (user != null && !this.members.contains(user) && (user.isManager() || user.isEmployee())) {
+                this.members.add(user);
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
