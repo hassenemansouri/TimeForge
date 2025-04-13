@@ -73,7 +73,7 @@ public class WorkspaceController {
             workspaceService.deleteWorkspace(workspaceId);
 
             // Envoi d'un SMS lors de la suppression de l'espace de travail
-            twilioSmsService.sendSms("+21694415244", "Un espace de travail a été supprimé avec l'ID : " + workspaceId);
+            //twilioSmsService.sendSms("+21694415244", "Un espace de travail a été supprimé avec l'ID : " + workspaceId);
 
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
