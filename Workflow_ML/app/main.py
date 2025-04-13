@@ -49,9 +49,9 @@ def get_clean_string_field(data, field_name):
 
 @app.route("/home", methods=["GET"])
 def home():
-    return "🚀 API Flask de prédiction de workflow opérationnelle ! ✅ "
+    return "🚀 Operational Workflow Prediction Flask API is Up and Running! ✅"
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST","GET"])
 def predict():
     if model is None or vectorizer is None:
         logger.error("❌ Le modèle ou le vectorizer n'est pas chargé")
