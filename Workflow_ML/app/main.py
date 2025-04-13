@@ -6,8 +6,6 @@ import logging
 
 # Initialiser Flask
 app = Flask(__name__)
-
-# Activer CORS pour toutes les routes (autoriser uniquement localhost:4200)
 CORS(app, resources={r"/*": {"origins": "http://localhost:4200"}})
 
 # Logger
@@ -36,19 +34,19 @@ def load_models():
     except Exception as e:
         logger.error(f"❌ Erreur lors du chargement des modèles : {e}")
 
-# Charger les modèles avant le premier appel
 load_models()
 
-# Utilitaire pour valider les champs texte
+# Nouvelle version stricte
 def get_clean_string_field(data, field_name):
-    value = data.get(field_name, "")
-    if value is None:
-        return ""
+    if field_name not in data:
+        raise ValueError(f"Le champ '{field_name}' est requis.")
+
+    value = data[field_name]
     if not isinstance(value, str):
         raise ValueError(f"Le champ '{field_name}' doit être une chaîne de caractères.")
+
     return value.strip()
 
-# Routes
 @app.route("/home", methods=["GET"])
 def home():
     return "🚀 API Flask de prédiction de workflow opérationnelle ! ✅ "
@@ -65,12 +63,7 @@ def predict():
             raise ValueError("❌ Données JSON manquantes")
 
         steps = get_clean_string_field(data, "steps")
-        actions = get_clean_string_field(data, "actions")
-
-        if not steps or not actions:
-            return jsonify({"error": "Les champs 'steps' et 'actions' sont requis."}), 400
-
-        combined_text = f"{steps} {actions}"
+        combined_text = f"{steps}"
         input_vec = vectorizer.transform([combined_text])
         prediction = model.predict(input_vec)[0]
 
