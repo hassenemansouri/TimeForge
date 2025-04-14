@@ -45,6 +45,16 @@ public class TaskController {
     public List<Task> getTasksByColumnId(@PathVariable String columnId) {
         return taskService.getTasksByColumnId(columnId);
     }
+//    @GetMapping("/search")
+//    public List<Task> searchTasks(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) String priority,
+//            @RequestParam(required = false) String assignedToId,
+//            @RequestParam(required = false) String projectId
+//    ) {
+//        return taskService.searchTasks(name, priority, assignedToId, projectId);
+//   }
+
 //    @GetMapping("/project/{projectId}")
 //    public List<Task> getTasksByProjectId(@PathVariable String projectId) {
 //        return taskService.getTasksByProjectId(projectId);
