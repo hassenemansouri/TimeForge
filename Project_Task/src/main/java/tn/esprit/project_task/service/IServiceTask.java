@@ -1,16 +1,17 @@
 package tn.esprit.project_task.service;
 
-import tn.esprit.project_task.entity.Project;
 import tn.esprit.project_task.entity.Task;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface IServiceTask {
-    Task addTask(Task task);
-    List<Task> findAllTasks();
+    Task createTask(Task task) ;
+    List<Task> getAllTasks();
     void deleteTask(String id_task);
-    Task modifyTask(Task task);
-    Optional<Task> getTaskById(String TasktId);
-
+    Optional<Task> getTaskById(String id_task);
+    Task update(String id, Task task) ;
+    public List<Task> getTasksByColumnId(String columnId);
+   // public List<Task> getTasksByProjectId(String projectId);
+   //List<Task> searchTasks(String name, String priority, String assignedToId, String projectId);
 }
