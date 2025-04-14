@@ -1,27 +1,42 @@
 package tn.esprit.goal_reward.Controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.goal_reward.Entity.Categorie;
 import tn.esprit.goal_reward.Entity.Goal;
+
 import tn.esprit.goal_reward.Entity.Reward;
 import tn.esprit.goal_reward.FullGoalResponse;
+import tn.esprit.goal_reward.Repository.CategorieRepository;
+import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Service.IService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/goals")
 @AllArgsConstructor
+
 public class TimeForgeController {
 
     @Autowired
     IService service;
+    @Autowired
+    private CategorieRepository categorieRepository;
+
+    @Autowired
+    private GoalRepository goalRepository;
 
     @PostMapping("/ajouterGoal")
-    public ResponseEntity<?> ajouterGoal(@RequestBody Goal goal) {
+    public ResponseEntity<?> ajouterGoal(@Valid @RequestBody Goal goal) {
         try {
             Goal newGoal = service.ajouterGoal(goal);
             return ResponseEntity.ok(newGoal);
@@ -29,6 +44,7 @@ public class TimeForgeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
     @GetMapping("/getall")
     public List<Goal> getAllGoals() {
@@ -51,13 +67,23 @@ public class TimeForgeController {
     }
 
     @PutMapping("/modifierGoal/{id}")
-    public Goal modifierGoal(@PathVariable String id, @RequestBody Goal goal) {
-        return service.modifierGoal(id, goal);
+    public ResponseEntity<?> modifierGoal(@PathVariable String id, @Valid @RequestBody Goal goal) {
+        try {
+            Goal updatedGoal = service.modifierGoal(id, goal);
+            return ResponseEntity.ok(updatedGoal);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/ajouterReward")
-    public Reward ajouterReward(@RequestBody Reward reward) {
-        return service.ajouterReward(reward);
+    public ResponseEntity<?> ajouterReward(@Valid @RequestBody Reward reward, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(err -> errors.put(err.getField(), err.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors); // Retourne les erreurs au front
+        }
+        return ResponseEntity.ok(service.ajouterReward(reward));
     }
 
     @DeleteMapping("/supprimerReward/{id}")
@@ -66,8 +92,13 @@ public class TimeForgeController {
     }
 
     @PutMapping("/modifierReward/{id}")
-    public Reward modifierReward(@PathVariable("id") String id, @RequestBody Reward reward) {
-        return service.modifierReward(id, reward);
+    public ResponseEntity<?> modifierReward(@PathVariable("id") String id, @Valid @RequestBody Reward reward, BindingResult result) {
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            result.getFieldErrors().forEach(err -> errors.put(err.getField(), err.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+        return ResponseEntity.ok(service.modifierReward(id, reward));
     }
 
     @GetMapping("/getReward/{id}")
@@ -78,6 +109,68 @@ public class TimeForgeController {
     @GetMapping("/getAllRewards")
     public List<Reward> getAllRewards() {
         return service.getAllRewards();
+    }
+
+
+    @PostMapping("/add")
+    public ResponseEntity<Categorie> addCategorie(@RequestBody Categorie categorie) {
+        return ResponseEntity.ok(service.addCategorie(categorie));
+    }
+
+    @GetMapping("/getAll")
+    public List<Categorie> getAllCategories() {
+        return service.getAllCategories();
+    }
+
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Optional<Categorie>> getCategorie(@PathVariable String id) {
+        return ResponseEntity.ok(service.getCategorieById(id));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Categorie> updateCategorie(@PathVariable String id, @RequestBody Categorie categorie) {
+        return ResponseEntity.ok(service.updateCategorie(id, categorie));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteCategorie(@PathVariable String id) {
+        service.deleteCategorie(id);
+    }
+    @PostMapping("/ajouterGoalAvecNouvellesCategories")
+    public ResponseEntity<?> ajouterGoalAvecNouvellesCategories(@RequestBody Map<String, Object> payload) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Extraction et conversion du goal
+            Goal goal = mapper.convertValue(payload.get("goal"), Goal.class);
+
+            // Extraction et conversion des catégories
+            List<Categorie> categories = ((List<?>) payload.get("categories"))
+                    .stream()
+                    .map(cat -> mapper.convertValue(cat, Categorie.class))
+                    .toList();
+
+            // Sauvegarder les catégories
+            List<Categorie> savedCategories = categories.stream()
+                    .map(categorieRepository::save)
+                    .toList();
+
+            // Lier au goal
+            goal.setCategories(savedCategories);
+
+            // Calcul automatique de la endDate si nécessaire
+            if (goal.getStartDate() != null && goal.getEndDate() == null) {
+                goal.setEndDate(service.calculateEndDate(goal.getStartDate(), savedCategories));
+            }
+
+            // Sauvegarder le goal
+            Goal savedGoal = goalRepository.save(goal);
+
+            return ResponseEntity.ok(savedGoal);
+
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erreur : " + e.getMessage());
+        }
     }
 
 }

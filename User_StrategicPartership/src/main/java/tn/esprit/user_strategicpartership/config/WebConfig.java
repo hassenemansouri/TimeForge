@@ -19,7 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     configuration.addAllowedHeader("*"); // Allow all headers
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
+    source.registerCorsConfiguration("/**", configuration); // Apply this config to all endpoints
 
     return source;
   }

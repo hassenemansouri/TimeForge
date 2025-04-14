@@ -3,7 +3,13 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: gateway # Correction du nom de l'application
-
+  cloud:
+    gateway:
+      routes:
+        - id: users-service
+          uri: lb://USERS
+          predicates:
+            - Path=/api/email/**
 eureka:
   instance:
     hostname: localhost

@@ -2,4 +2,18 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   application:
-    name: users  # Correct name of the application
+    name: users  # Make sure the name is correct
+brevo:
+  api-key: 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
+  sender-email: hassenemansouri35@gmail.com
+  sender-name: App
+
+frontend:
+  url: http://localhost:4200
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
