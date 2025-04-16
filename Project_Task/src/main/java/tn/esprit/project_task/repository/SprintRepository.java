@@ -2,13 +2,9 @@ package tn.esprit.project_task.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import tn.esprit.project_task.entity.Project;
-
-import java.time.LocalDate;
-import java.util.List;
+import tn.esprit.project_task.entity.Sprint;
 
 @Repository
-public interface ProjectRepository extends MongoRepository<Project, String> {
 
-
+public interface SprintRepository extends MongoRepository<Sprint, String> {
 }
