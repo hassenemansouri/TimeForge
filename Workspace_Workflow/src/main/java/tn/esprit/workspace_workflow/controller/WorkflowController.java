@@ -96,12 +96,14 @@ public class WorkflowController {
     }
     // Méthodes pour la gestion des fichiers (issues du FileController)
     @PostMapping("/{workflowId}/files/upload")
-    public ResponseEntity<String> uploadFile(@PathVariable String workflowId,
+    public ResponseEntity<Object> uploadFile(@PathVariable String workflowId,
                                              @RequestParam MultipartFile file) {
         try {
             fileService.save(file);
             log.info("File saved for workflow {}", workflowId);
-            return ResponseEntity.ok("File uploaded successfully for workflow " + workflowId);
+
+            // Return a structured JSON response
+            return ResponseEntity.ok().body(new FileUploadResponse("File uploaded successfully", workflowId));
         } catch (Exception e) {
             log.error("Error uploading file for workflow {}: {}", workflowId, e.getMessage());
             return ResponseEntity.internalServerError().body("Error uploading file");
