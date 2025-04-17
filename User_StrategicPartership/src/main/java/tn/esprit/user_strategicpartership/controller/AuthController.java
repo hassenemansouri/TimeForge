@@ -1,5 +1,6 @@
 package tn.esprit.user_strategicpartership.controller;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Data;
@@ -105,30 +106,76 @@ public class AuthController {
   @Autowired
   private BrevoEmailService brevoEmailService;
 
-  @PostMapping("/forgot-password")
-  public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
-    String email = body.get("email");
-    if (email == null || email.isEmpty()) {
-      return ResponseEntity.badRequest().body("Email is required.");
-    }
-
-    // Call your service to send the reset email
-    try {
-      brevoEmailService.sendEmail(email, "Reset Your Password", "<p>Click <a href='http://localhost:4200/reset-password?email=" + email + "'>here</a> to reset your password.</p>");
-      return ResponseEntity.ok("Password reset email sent.");
-    } catch (Exception e) {
-      return ResponseEntity.status(500).body("Error sending email.");
-    }
+//  @PostMapping("/forgot-password")
+//  public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
+//    String email = body.get("email");
+//    if (email == null || email.isEmpty()) {
+//      return ResponseEntity.badRequest().body("Email is required.");
+//    }
+//
+//    // Call your service to send the reset email
+//    try {
+//      brevoEmailService.sendEmail(email, "Reset Your Password", "<p>Click <a href='http://localhost:4200/reset-password?email=" + email + "'>here</a> to reset your password.</p>");
+//      return ResponseEntity.ok("Password reset email sent.");
+//    } catch (Exception e) {
+//      return ResponseEntity.status(500).body("Error sending email.");
+//    }
+//  }
+@PostMapping("/forgot-password")
+public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
+  String email = body.get("email");
+  if (email == null || email.isEmpty()) {
+    return ResponseEntity.badRequest().body("Email is required.");
   }
+
+  Optional<User> userOpt = userRepository.findByEmail(email);
+  if (userOpt.isEmpty()) {
+    return ResponseEntity.ok("If this email is registered, a reset link will be sent."); // Avoid exposing if email exists
+  }
+
+  // ✅ Generate JWT reset token (valid for 15 mins)
+  String resetToken = jwtUtil.generatePasswordResetToken(email); // We'll define this method below
+
+  // ✅ Email with token in link
+  String resetLink = "http://localhost:4200/reset-password?token=" + resetToken;
+  String content = "<p>Click <a href='" + resetLink + "'>here</a> to reset your password. This link is valid for 15 minutes.</p>";
+
+  try {
+    brevoEmailService.sendEmail(email, "Reset Your Password", content);
+    return ResponseEntity.ok("Password reset email sent.");
+  } catch (Exception e) {
+    return ResponseEntity.status(500).body("Error sending email.");
+  }
+}
   @PostMapping("/reset-password")
-  public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
-    userService.resetPassword(request.getToken(), request.getNewPassword());
-    return ResponseEntity.ok("Password reset successfully");
+  public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> body) {
+    String token = body.get("token");
+    String newPassword = body.get("password");
+
+    if (token == null || newPassword == null) {
+      return ResponseEntity.badRequest().body("Token and new password are required.");
+    }
+
+    // ✅ Validate Token
+    try {
+      String email = jwtUtil.extractUsername(token); // reuse existing method to get email
+      Optional<User> userOpt = userRepository.findByEmail(email);
+      if (userOpt.isEmpty()) {
+        return ResponseEntity.badRequest().body("Invalid token.");
+      }
+
+      User user = userOpt.get();
+      user.setPassword(passwordEncoder.encode(newPassword));
+      userRepository.save(user);
+
+      return ResponseEntity.ok("Password reset successfully!");
+
+    } catch (ExpiredJwtException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired. Please request a new one.");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
+    }
   }
 
-  @Data
-  public class ResetPasswordRequest {
-    private String token;
-    private String newPassword;
-  }
+
 }
