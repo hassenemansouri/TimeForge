@@ -9,8 +9,7 @@ import tn.esprit.project_task.service.ProjectImpl;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
@@ -18,39 +17,31 @@ import static org.bouncycastle.asn1.x500.style.RFC4519Style.c;
 @AllArgsConstructor
 public class ProjectController {
 
-    private ProjectImpl service;
+    private ProjectImpl projectService;
 
-    @PostMapping("/add")
-    public Project addProject(Project p) {
-
-        Project project = service.addProject(p);
-        return project;
-    }
-
-    @GetMapping()
+    @GetMapping
     public List<Project> getAllProjects() {
-        List<Project> listProjects =  service.findAllProjects ();
-        return listProjects;
+        return projectService.getAllProjects();
     }
-    @DeleteMapping("/remove-project/{project-id}")
-    public void removeProject(@PathVariable("project-id") String projet_id) {
 
-        service.deleteProject(projet_id);
+    @GetMapping("/{id}")
+    public Optional<Project> getProjectById(@PathVariable String id) {
+        return projectService.getProjectById(id);
+    }
+
+    @PostMapping("/create")
+    public Project createProject(@RequestBody Project project) {
+        return projectService.createProject(project);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProject(@PathVariable String id) {
+        projectService.deleteProject(id);
     }
     @PutMapping("/modify-project")
     public Project modifyProject(@RequestBody Project project) {
-        Project p = service.modifyProject(project);
+        Project p = projectService.modifyProject(project);
         return p;
-    }
-    @GetMapping("/search/keyword")
-    public List<Project> searchByTitleKeyword(@RequestParam String keyword) {
-        return service.findByTitleContainingIgnoreCase(keyword);
-    }
-    @GetMapping("/getProjectById/{ProjectId}")
-    public ResponseEntity<Project> getWorkflowById(@PathVariable String ProjectId) {
-        return service.getProjectById(ProjectId)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

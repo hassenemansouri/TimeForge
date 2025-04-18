@@ -10,7 +10,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-  private static final String SECRET_KEY = "your_256_bit_secret_your_256_bit_secret";  // Change this!
+  private static final String SECRET_KEY = "your_512_bit_secret_your_512_bit_secret_your_512_bit_secret_123456";
   private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
 
   private Key getSigningKey() {
@@ -50,4 +50,13 @@ public class JwtUtil {
   private boolean isTokenExpired(String token) {
     return extractClaim(token, Claims::getExpiration).before(new Date());
   }
+
+  public String generatePasswordResetToken(String email) {
+    return Jwts.builder()
+        .setSubject(email)
+        .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 15 minutes validity
+        .signWith(getSigningKey(), SignatureAlgorithm.HS512)  // use your existing secret key
+        .compact();
+  }
+
 }
