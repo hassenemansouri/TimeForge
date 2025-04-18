@@ -30,6 +30,10 @@ public class Workflow {
     @JsonProperty("steps")
     private List<String> steps = new ArrayList<>();
 
+    @NotNull(message = "FileName cannot be null")
+    @DBRef
+    private String fileName;
+
     @NotNull(message = "collaborators cannot be null")
     @DBRef
     private List<User> collaborators = new ArrayList<>();
