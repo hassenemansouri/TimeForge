@@ -3,3 +3,9 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: goals  # Correction du nom de l'application
+management:
+  tracing:
+    sampling:
+      probability: 0.0
+  enabled: false
+

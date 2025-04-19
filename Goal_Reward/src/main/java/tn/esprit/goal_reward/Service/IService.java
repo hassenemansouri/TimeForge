@@ -30,4 +30,4 @@ public interface IService {
     void deleteCategorie(String id);
     Date calculateEndDate(Date startDate, List<Categorie> categories);
 
-    public Goal ajouterGoalAvecNouvellesCategories(Goal goal, List<Categorie> categoriesFromRequest);}
+    Goal ajouterGoalAvecNouvellesCategories(Goal goal, List<Categorie> categoriesFromRequest) ;    }
