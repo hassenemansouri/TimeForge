@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.goal_reward.Entity.Categorie;
-import tn.esprit.goal_reward.Entity.Goal;
+import tn.esprit.goal_reward.Entity.*;
+import tn.esprit.goal_reward.Repository.CategorieRuleRepository;
 
-import tn.esprit.goal_reward.Entity.Reward;
 import tn.esprit.goal_reward.FullGoalResponse;
 import tn.esprit.goal_reward.Repository.CategorieRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
@@ -31,7 +30,8 @@ public class TimeForgeController {
     IService service;
     @Autowired
     private CategorieRepository categorieRepository;
-
+    @Autowired
+    CategorieRuleRepository categorieRuleRepository;
     @Autowired
     private GoalRepository goalRepository;
 
@@ -137,35 +137,26 @@ public class TimeForgeController {
         service.deleteCategorie(id);
     }
     @PostMapping("/ajouterGoalAvecNouvellesCategories")
-    public ResponseEntity<?> ajouterGoalAvecNouvellesCategories(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<?> ajouterGoalAvecCategorieEtRule(@RequestBody GoalCreationRequest request) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
+            // Création et sauvegarde de la nouvelle catégorie sans champ `field` et `amount`
+            Categorie newCat = Categorie.builder()
+                    .libelle(request.getCategorie().getLibelle())
+                    .description(request.getCategorie().getDescription())
+                    .build();
 
-            // Extraction et conversion du goal
-            Goal goal = mapper.convertValue(payload.get("goal"), Goal.class);
+            Categorie savedCat = categorieRepository.save(newCat);
 
-            // Extraction et conversion des catégories
-            List<Categorie> categories = ((List<?>) payload.get("categories"))
-                    .stream()
-                    .map(cat -> mapper.convertValue(cat, Categorie.class))
-                    .toList();
+            // Lier la catégorie au Goal
+            Goal goal = request.getGoal();
+            goal.setCategories(List.of(savedCat));
 
-            // Sauvegarder les catégories
-            List<Categorie> savedCategories = categories.stream()
-                    .map(categorieRepository::save)
-                    .toList();
-
-            // Lier au goal
-            goal.setCategories(savedCategories);
-
-            // Calcul automatique de la endDate si nécessaire
+            // Calcul de la date de fin (endDate) si non fournie
             if (goal.getStartDate() != null && goal.getEndDate() == null) {
-                goal.setEndDate(service.calculateEndDate(goal.getStartDate(), savedCategories));
+                goal.setEndDate(service.calculateEndDate(goal.getStartDate(), List.of(savedCat)));
             }
 
-            // Sauvegarder le goal
             Goal savedGoal = goalRepository.save(goal);
-
             return ResponseEntity.ok(savedGoal);
 
         } catch (Exception e) {
