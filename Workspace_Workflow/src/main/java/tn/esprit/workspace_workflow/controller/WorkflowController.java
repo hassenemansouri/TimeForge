@@ -1,8 +1,10 @@
 package tn.esprit.workspace_workflow.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,9 @@ import tn.esprit.workspace_workflow.service.FileService;
 import tn.esprit.workspace_workflow.service.WorkflowService;
 import tn.esprit.workspace_workflow.service.TwilioSmsService;
 import tn.esprit.workspace_workflow.client.User;
+
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,19 +33,35 @@ public class WorkflowController {
     private final TwilioSmsService twilioSmsService;
     private final FileService fileService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Workflow> createWorkflow(@RequestBody Workflow workflow) {
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Workflow> createWorkflow(
+            @RequestParam("workflowName") String workflowName,
+            @RequestParam("steps") List<String> steps,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+    ) {
         try {
+            Workflow workflow = new Workflow();
+            workflow.setWorkflowName(workflowName);
+            workflow.setSteps(steps);
+            workflow.setFileName(file.getOriginalFilename());  // On peut aussi stocker le fichier
+            workflow.setStartDate(startDate);
+            workflow.setEndDate(endDate);
+
             Workflow createdWorkflow = workflowService.createWorkflow(workflow);
 
-            // Envoi d'un SMS lors de la création du workflow
-            twilioSmsService.sendSms("+21694415244", "Un nouveau workflow a été créé : " + createdWorkflow.getWorkflowName ());
+            // Envoi SMS
+            twilioSmsService.sendSms("+21694415244", "Un nouveau workflow a été créé : " + createdWorkflow.getWorkflowName());
 
             return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkflow);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+
+
 
     @GetMapping("/getWorkflowById/{workflowId}")
     public ResponseEntity<Workflow> getWorkflowById(@PathVariable String workflowId) {
@@ -54,21 +75,47 @@ public class WorkflowController {
         return ResponseEntity.ok(workflowService.getAllWorkflows());
     }
 
-    @PutMapping("/update/{workflowId}")
-    public ResponseEntity<?> updateWorkflow(@PathVariable String workflowId,
-                                            @RequestBody Workflow workflow) {
+    @PutMapping(value = "/update/{workflowId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateWorkflow(
+            @PathVariable String workflowId,
+            @RequestParam("workflowName") String workflowName,
+            @RequestParam("steps") List<String> steps,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+    ) {
         try {
+            // Créer l'objet Workflow
+            Workflow workflow = new Workflow();
+            workflow.setWorkflowName(workflowName);
+            workflow.setSteps(steps);
+
+            // Si un fichier est envoyé, on le gère
+            if (file != null && !file.isEmpty()) {
+                workflow.setFileName(file.getOriginalFilename()); // ou tu peux choisir de le stocker
+            }
+
+            workflow.setStartDate(startDate);
+            workflow.setEndDate(endDate);
+
+            // Appel du service pour mettre à jour le workflow
             Workflow updatedWorkflow = workflowService.updateWorkflow(workflowId, workflow);
 
-            // Envoi d'un SMS lors de la mise à jour du workflow
-            twilioSmsService.sendSms("+21694415244", "Le workflow a été mis à jour : " + updatedWorkflow.getWorkflowName ());
+            // Envoi de l'alerte SMS
+            twilioSmsService.sendSms("+21694415244", "Le workflow a été mis à jour : " + updatedWorkflow.getWorkflowName());
 
             return ResponseEntity.ok(updatedWorkflow);
-        } catch (RuntimeException e) {
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Workflow introuvable: " + e.getMessage());
+                    .body("Workflow not found with ID: " + workflowId);  // Detailed error message
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred while updating the workflow: " + e.getMessage());
         }
     }
+
+
+
 
     @DeleteMapping("/delete/{workflowId}")
     public ResponseEntity<Void> deleteWorkflow(@PathVariable String workflowId) {

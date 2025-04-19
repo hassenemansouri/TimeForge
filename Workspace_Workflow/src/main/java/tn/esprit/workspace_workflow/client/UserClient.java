@@ -12,5 +12,4 @@ public interface UserClient {
     @GetMapping("/workspace/{workspace-id}")
     List<User> fundAllUsersByWorkspace(@PathVariable("workspace-id") String workspaceId);
 
-
 }
