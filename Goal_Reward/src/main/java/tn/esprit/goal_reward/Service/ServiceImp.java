@@ -1,20 +1,17 @@
 package tn.esprit.goal_reward.Service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.goal_reward.Entity.Categorie;
-import tn.esprit.goal_reward.Entity.Goal;
-import tn.esprit.goal_reward.Entity.Reward;
+import tn.esprit.goal_reward.Entity.*;
 import tn.esprit.goal_reward.FullGoalResponse;
 import tn.esprit.goal_reward.Repository.CategorieRepository;
+import tn.esprit.goal_reward.Repository.CategorieRuleRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Repository.RewardRepository;
 import tn.esprit.goal_reward.client.UserClient;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -24,6 +21,8 @@ public class ServiceImp implements IService {
     private UserClient userClient;
     private RewardRepository rewardRepository;
     private CategorieRepository categorieRepository;
+    private CategorieRuleRepository categorieRuleRepository;
+
     // Fonction existante pour ajouter un Goal
     public Goal ajouterGoal(Goal goal) {
         if (goal == null || goal.getTitle() == null || goal.getTitle().isEmpty()) {
@@ -40,60 +39,29 @@ public class ServiceImp implements IService {
         }
         return goalRepository.save(goal);
     }
+    private static final Map<String, DurationRule> durationRules = new HashMap<>();
 
-
-
+    @PostConstruct
+    public void loadRulesFromDb() {
+        List<CategorieRule> rules = categorieRuleRepository.findAll();
+        for (CategorieRule rule : rules) {
+            durationRules.put(rule.getLibelle().toLowerCase().trim(),
+                    new DurationRule(rule.getField(), rule.getAmount()));
+        }
+    }
     public Date calculateEndDate(Date startDate, List<Categorie> categories) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
 
         if (categories != null && !categories.isEmpty()) {
             for (Categorie categorie : categories) {
-                String categoryName = categorie.getLibelle().toLowerCase();
-
-                switch (categoryName) {
-                    case "urgence":
-                        calendar.add(Calendar.HOUR, 12); // Tâches urgentes: 12 heures
-                        break;
-                    case "pomodoro":
-                        calendar.add(Calendar.MINUTE, 25); // Session Pomodoro: 25 min
-                        break;
-                    case "projet court":
-                        calendar.add(Calendar.DAY_OF_YEAR, 7); // 1 semaine
-                        break;
-                    case "projet moyen":
-                        calendar.add(Calendar.MONTH, 1); // 1 mois
-                        break;
-                    case "projet long":
-                        calendar.add(Calendar.MONTH, 6); // 6 mois
-                        break;
-                    case "objectif perseonnl":
-                        calendar.add(Calendar.MONTH, 3); // 3 mois
-                        break;
-                    case "objectif professionnel":
-                        calendar.add(Calendar.MONTH, 12); // 1 an
-                        break;
-                    case "santé":
-                        calendar.add(Calendar.DAY_OF_YEAR, 1); // Rappels santé: 1 jour
-                        break;
-                    case "collaboration":
-                        calendar.add(Calendar.DAY_OF_YEAR, 14); // Projets collaboratifs: 2 semaines
-                        break;
-                    case "apprentissage":
-                        calendar.add(Calendar.WEEK_OF_YEAR, 4); // Formation: 4 semaines
-                        break;
-                    case "milestone":
-                        calendar.add(Calendar.MONTH, 2); // Jalons projet: 2 mois
-                        break;
-                    case "analyse productivité":
-                        calendar.add(Calendar.DAY_OF_YEAR, 30); // Analyse mensuelle
-                        break;
-                    default:
-                        calendar.add(Calendar.DAY_OF_YEAR, 3); // Par défaut: 3 jours
-                }
+                String key = categorie.getLibelle().toLowerCase().trim();
+                DurationRule rule = durationRules.getOrDefault(key, new DurationRule(Calendar.DAY_OF_YEAR, 3)); // Valeur par défaut de 3 jours
+                rule.apply(calendar);  // Applique la règle de durée sur le calendrier
             }
         } else {
-            calendar.add(Calendar.DAY_OF_YEAR, 1); // Durée par défaut si aucune catégorie: 1 jour
+            // Aucune catégorie => règle par défaut
+            calendar.add(Calendar.DAY_OF_YEAR, 1); // Si aucune catégorie, ajoute 1 jour
         }
 
         return calendar.getTime();

@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Document(collection = "appointments")
 @Getter
@@ -14,13 +14,14 @@ import java.time.LocalDateTime;
 public class Appointment {
 
     @Id
-    private String id;
-
+    private String uuid;
     private String title;
-    private String description;
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private String color;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private String calendarId;  // ID du calendrier auquel ce rendez-vous appartient
 
-    // Getters & Setters
+
+
+    // Getters et Setters
 }
