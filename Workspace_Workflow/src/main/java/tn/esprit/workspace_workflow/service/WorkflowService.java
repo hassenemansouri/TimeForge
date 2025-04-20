@@ -51,6 +51,17 @@ public class WorkflowService {
                         existingWorkflow.setCreator(updatedWorkflow.getCreator());
                     }
 
+                    if (updatedWorkflow.getFileName () != null) {
+                        existingWorkflow.setFileName(updatedWorkflow.getFileName());
+                    }
+
+                    if (updatedWorkflow.getStartDate () != null) {
+                        existingWorkflow.setStartDate(updatedWorkflow.getStartDate());
+                    }
+                    if (updatedWorkflow.getEndDate () != null) {
+                        existingWorkflow.setEndDate(updatedWorkflow.getEndDate());
+                    }
+
                     log.info("Workflow mis à jour : {}", existingWorkflow);
                     return workflowRepository.save(existingWorkflow);
                 })

@@ -1,6 +1,7 @@
 package tn.esprit.user_strategicpartership.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.Collections;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,5 +75,13 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
+    @Operation(summary = "Search users by name or email")
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+        List<User> users = userService.searchUsers(query);
+        return ResponseEntity.ok(users);
+    }
 }
