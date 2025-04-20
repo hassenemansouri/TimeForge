@@ -57,4 +57,9 @@ public class BlockchainService {
 
     return new BlockchainRecord(hash, previousHash, timestamp, dataHash, String.valueOf(nonce), partnershipId);
   }
+
+  public BlockchainRecord getBlockchainRecord(String partnershipId) {
+    return blockchainRecordRepository.findByPartnershipId(partnershipId)
+        .orElseThrow(() -> new IllegalArgumentException("Blockchain record not found"));
+  }
 }

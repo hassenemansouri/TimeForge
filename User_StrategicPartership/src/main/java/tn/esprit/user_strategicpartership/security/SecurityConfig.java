@@ -1,6 +1,5 @@
 package tn.esprit.user_strategicpartership.security;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,21 +16,28 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import tn.esprit.user_strategicpartership.entity.OAuth2LoginSuccessHandler;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
 import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
+import tn.esprit.user_strategicpartership.service.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
+  // Add these new dependencies
   @Autowired
-  private CorsConfigurationSource corsConfigurationSource;
-  private final UserRepository userRepository;
+  private CustomOAuth2UserService customOAuth2UserService;
+  @Autowired
+  private OAuth2LoginSuccessHandler oauth2LoginSuccessHandler;
 
   public SecurityConfig(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
+  @Autowired
+  private CorsConfigurationSource corsConfigurationSource;
+  private final UserRepository userRepository;
+
 
   @Bean
   public PasswordEncoder passwordEncoder() {
@@ -54,14 +60,35 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
     http
-        .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF
-        .cors(cors -> cors.configurationSource(corsConfigurationSource))  // Configure CORS
+        .csrf(AbstractHttpConfigurer::disable)
+        .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/auth/register", "/auth/login", "/auth/forgot-password","/auth/reset-password","/api/partnerships","/api/blockchain","/api/*").permitAll()  // Public endpoints
-            .anyRequest().authenticated()  // Secure all other endpoints
+            .requestMatchers(
+                "/",
+                "/login**",
+                "/error**",
+                "/auth/**",
+                "/api/partnerships/**",
+                "/api/blockchain/**",
+                "/users/**",
+                "/swagger-ui/**",
+                "/error**",
+                "/oauth2/**",
+                "/login/oauth2/**"
+            ).permitAll()
+            .anyRequest().authenticated()
         )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .httpBasic(Customizer.withDefaults());;
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/login")  // Custom login page
+            .userInfoEndpoint(userInfo -> userInfo
+                .userService(customOAuth2UserService)
+            )
+            .successHandler(oauth2LoginSuccessHandler)
+        )
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+        .httpBasic(Customizer.withDefaults());
 
     return http.build();
   }

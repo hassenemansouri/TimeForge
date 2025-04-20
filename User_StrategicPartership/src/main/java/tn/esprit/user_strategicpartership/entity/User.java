@@ -3,15 +3,17 @@ package tn.esprit.user_strategicpartership.entity;
 import java.time.LocalDateTime;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
+@CompoundIndex(name = "search_idx", def = "{'name': 1, 'email': 1}")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User{
     @Id
-    private String id;  // Correction : MongoDB utilise souvent un String pour l'ID
+    private String id;
     private String name;
     private String email;
     private String password;
@@ -22,6 +24,8 @@ public class User{
     private Role role;
     private String resetToken;
     private LocalDateTime resetTokenExpiration;
+    private String provider;
+    private String providerId;
     private boolean isManager() {
         return this.role == Role.MANAGER;
     }

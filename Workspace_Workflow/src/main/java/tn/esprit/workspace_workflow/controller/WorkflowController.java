@@ -20,6 +20,7 @@ import tn.esprit.workspace_workflow.client.User;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/workflows")
@@ -175,4 +176,11 @@ public class WorkflowController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, Object>> getDashboardStats() {
+        Map<String, Object> stats = workflowService.getDashboardStats();
+        return ResponseEntity.ok(stats);
+    }
+
+
 }
