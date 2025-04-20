@@ -1,10 +1,15 @@
 package tn.esprit.user_strategicpartership.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.user_strategicpartership.entity.StrategicPartnertship;
 
+import tn.esprit.user_strategicpartership.entity.User;
+import tn.esprit.user_strategicpartership.repository.UserRepository;
 import tn.esprit.user_strategicpartership.service.StrategicPartnershipPdfService;
 import tn.esprit.user_strategicpartership.service.StrategicPartnershipService;
 
@@ -17,7 +22,9 @@ public class PdfController {
 
   @Autowired
   private StrategicPartnershipService partnershipService;
+  
 
+  
   @GetMapping("/{id}/pdf")
   public ResponseEntity<byte[]> generatePdf(@PathVariable String id) {
     try {
