@@ -143,4 +143,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public List<User> searchUsers(String query) {
+        return userRepository.findBySearchQuery(query);
+    }
 }

@@ -3,6 +3,22 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: users  # Make sure the name is correct
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 474610756884-0lui56qp0jkv53rl45trhgpsqcc520p2.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+          github:
+            client-id: your-github-client-id
+            client-secret: your-github-client-secret
+            scope:
+              - user:email
+              - read:user
 brevo:
   api-key: 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
   sender-email: hassenemansouri35@gmail.com

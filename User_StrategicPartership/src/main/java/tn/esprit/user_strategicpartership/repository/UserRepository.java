@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import tn.esprit.user_strategicpartership.entity.User;
-
+import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 @Repository
@@ -21,4 +21,12 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     Optional<User> findByEmail(String email);
     Optional<User> findByResetToken(String resetToken);
+
+    @Query("{ $or: [ " +
+        "{ 'name': { $regex: '^?0', $options: 'i' } }, " +  // Starts with
+        "{ 'name': { $regex: '.*?0.*', $options: 'i' } }, " +  // Contains
+        "{ 'email': { $regex: '^?0', $options: 'i' } }, " +  // Starts with
+        "{ 'email': { $regex: '.*?0.*', $options: 'i' } } " +  // Contains
+        "] }")
+    List<User> findBySearchQuery(String query);
 }

@@ -47,4 +47,9 @@ public class StrategicPartnershipService {
   public List<StrategicPartnertship> getAllPartnerships() {
     return partnershipRepository.findAll();
   }
+
+  public StrategicPartnertship getPartnership(String partnershipId) {
+    return partnershipRepository.findById(partnershipId)
+        .orElseThrow(() -> new IllegalArgumentException("Partnership not found"));
+  }
 }

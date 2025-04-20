@@ -20,6 +20,5 @@ public class StrategicPartnertship {
   private String blockchainHash;
   private LocalDateTime blockchainTimestamp;
 
-  // Constructors, Getters, Setters
-  // ... (generate these in your IDE)
+
 }
