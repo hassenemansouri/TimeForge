@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.user_strategicpartership.dto.AuthRequest;
 import tn.esprit.user_strategicpartership.dto.AuthResponse;
+import tn.esprit.user_strategicpartership.dto.UserDTO;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
 import tn.esprit.user_strategicpartership.security.CustomUserDetailsService;
@@ -67,26 +68,51 @@ public class AuthController {
     }
   }
 
-
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody AuthRequest request) {
     try {
-      // 1) Authenticate using the AuthenticationManager
+      // Authentication
       UsernamePasswordAuthenticationToken authToken =
           new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
-
       authenticationManager.authenticate(authToken);
 
-      // 2) Generate JWT token
+      // Get user
+      User user = userRepository.findByEmail(request.getEmail())
+          .orElseThrow(() -> new RuntimeException("User not found"));
+
+      // Generate token
       String jwtToken = jwtUtil.generateToken(request.getEmail());
 
-      // 3) Return token in response
-      return ResponseEntity.ok(new AuthResponse(jwtToken));
+      // Create response
+      AuthResponse response = new AuthResponse();
+      response.setToken(jwtToken);
+      response.setUser(new UserDTO(user)); // Using DTO for safety
+     // response.setUser(user);  // Directly use the entity
+      return ResponseEntity.ok(response);
 
     } catch (AuthenticationException ex) {
       return ResponseEntity.status(401).body("Invalid email or password!");
     }
   }
+//  @PostMapping("/login")
+//  public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+//    try {
+//      // 1) Authenticate using the AuthenticationManager
+//      UsernamePasswordAuthenticationToken authToken =
+//          new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+//
+//      authenticationManager.authenticate(authToken);
+//
+//      // 2) Generate JWT token
+//      String jwtToken = jwtUtil.generateToken(request.getEmail());
+//
+//      // 3) Return token in response
+//      return ResponseEntity.ok(new AuthResponse(jwtToken));
+//
+//    } catch (AuthenticationException ex) {
+//      return ResponseEntity.status(401).body("Invalid email or password!");
+//    }
+//  }
 
 //  @PostMapping("/forgot-password")
 //  public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {

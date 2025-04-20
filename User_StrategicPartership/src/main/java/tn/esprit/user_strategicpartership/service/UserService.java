@@ -1,16 +1,19 @@
 package tn.esprit.user_strategicpartership.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import java.util.Base64;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.user_strategicpartership.dto.UpdateUserDto;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
 
@@ -26,6 +29,7 @@ public class UserService {
     private JavaMailSender mailSender;
 
     private final PasswordEncoder passwordEncoder;
+
 
 
     public User addUser(User user) {
@@ -146,4 +150,70 @@ public class UserService {
     public List<User> searchUsers(String query) {
         return userRepository.findBySearchQuery(query);
     }
-}
+
+    public User updateUserPhoto(String userId, MultipartFile file) throws IOException {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (file != null && !file.isEmpty()) {
+            String fileName = StringUtils.cleanPath(
+                Objects.requireNonNull(file.getOriginalFilename()));
+            String contentType = file.getContentType();
+            String base64Image = Base64.getEncoder().encodeToString(file.getBytes());
+
+            user.setPhotoBase64(base64Image);
+            user.setPhotoContentType(contentType);
+
+            return userRepository.save(user);
+        } else {
+            throw new IllegalArgumentException("File is empty");
+        }
+    }
+
+    // Get user photo (returns Base64 string)
+    public String getUserPhoto(String userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        return user.getPhotoBase64();
+    }
+
+    // Remove user photo
+    public void removeUserPhoto(String userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPhotoBase64(null);
+        user.setPhotoContentType(null);
+        userRepository.save(user);
+    }
+
+
+    public User updateUser(String userId, UpdateUserDto updateUserDto) {
+        return userRepository.findById(userId)
+            .map(user -> {
+                if (updateUserDto.getName() != null) {
+                    user.setName(updateUserDto.getName());
+                }
+                if (updateUserDto.getEmail() != null) {
+                    user.setEmail(updateUserDto.getEmail());
+                }
+                if (updateUserDto.getRole() != null) {
+                    user.setRole(updateUserDto.getRole());
+                }
+                if (updateUserDto.getWorkspaceId() != null) {
+                    user.setWorkspaceId(updateUserDto.getWorkspaceId());
+                }
+                if (updateUserDto.getCollaborationId() != null) {
+                    user.setCollaborationId(updateUserDto.getCollaborationId());
+                }
+                if (updateUserDto.getGoalId() != null) {
+                    user.setGoalId(updateUserDto.getGoalId());
+                }
+                if (updateUserDto.getProjectId() != null) {
+                    user.setProjectId(updateUserDto.getProjectId());
+                }
+                return userRepository.save(user);
+            })
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+    }
+    }
+
