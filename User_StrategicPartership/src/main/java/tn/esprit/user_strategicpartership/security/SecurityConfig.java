@@ -3,6 +3,7 @@ package tn.esprit.user_strategicpartership.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -63,6 +64,7 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .authorizeHttpRequests(auth -> auth
+            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers(
                 "/",
                 "/login**",
@@ -78,17 +80,17 @@ public class SecurityConfig {
             ).permitAll()
             .anyRequest().authenticated()
         )
-        .oauth2Login(oauth2 -> oauth2
-            .loginPage("/login")  // Custom login page
-            .userInfoEndpoint(userInfo -> userInfo
-                .userService(customOAuth2UserService)
-            )
-            .successHandler(oauth2LoginSuccessHandler)
-        )
+//        .oauth2Login(oauth2 -> oauth2
+//            .loginPage("/login")  // Custom login page
+//            .userInfoEndpoint(userInfo -> userInfo
+//                .userService(customOAuth2UserService)
+//            )
+//            .successHandler(oauth2LoginSuccessHandler)
+//        )
         .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .httpBasic(Customizer.withDefaults());
+        );
+
 
     return http.build();
   }

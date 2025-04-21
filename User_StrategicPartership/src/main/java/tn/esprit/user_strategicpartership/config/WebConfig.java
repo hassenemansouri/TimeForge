@@ -1,5 +1,6 @@
 package tn.esprit.user_strategicpartership.config;
 
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -14,13 +15,14 @@ public class WebConfig implements WebMvcConfigurer {
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.addAllowedOrigin("http://localhost:4200"); // Allow requests from Angular frontend
-    configuration.addAllowedMethod("*"); // Allow all HTTP methods (GET, POST, etc.)
-    configuration.addAllowedHeader("*"); // Allow all headers
+    configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+    configuration.setAllowedMethods(List.of("*"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true);
+    configuration.setMaxAge(3600L);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration); // Apply this config to all endpoints
-
+    source.registerCorsConfiguration("/**", configuration);
     return source;
   }
 }
