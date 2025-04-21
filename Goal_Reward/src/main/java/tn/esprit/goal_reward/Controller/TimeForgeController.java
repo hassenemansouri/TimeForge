@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,8 @@ import tn.esprit.goal_reward.Repository.CategorieRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Service.IService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/goals")
@@ -139,29 +138,26 @@ public class TimeForgeController {
     @PostMapping("/ajouterGoalAvecNouvellesCategories")
     public ResponseEntity<?> ajouterGoalAvecCategorieEtRule(@RequestBody GoalCreationRequest request) {
         try {
-            // Création et sauvegarde de la nouvelle catégorie sans champ `field` et `amount`
-            Categorie newCat = Categorie.builder()
-                    .libelle(request.getCategorie().getLibelle())
-                    .description(request.getCategorie().getDescription())
-                    .build();
-
-            Categorie savedCat = categorieRepository.save(newCat);
-
-            // Lier la catégorie au Goal
             Goal goal = request.getGoal();
-            goal.setCategories(List.of(savedCat));
+            List<Categorie> categories = request.getCategories();
 
-            // Calcul de la date de fin (endDate) si non fournie
-            if (goal.getStartDate() != null && goal.getEndDate() == null) {
-                goal.setEndDate(service.calculateEndDate(goal.getStartDate(), List.of(savedCat)));
-            }
-
-            Goal savedGoal = goalRepository.save(goal);
-            return ResponseEntity.ok(savedGoal);
-
+            Goal goalCree = service.ajouterGoalAvecNouvellesCategories(goal, categories);
+            return ResponseEntity.ok(goalCree);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Erreur : " + e.getMessage());
         }
+    }
+    @GetMapping("/estimerDateFin/{libelle}")
+    public ResponseEntity<Date> getEstimatedEndDate(@PathVariable String libelle) {
+        Categorie cat = new Categorie();
+        cat.setLibelle(libelle);
+        Date estimated = service.calculateSmartEndDate(new Date(), List.of(cat));
+        return ResponseEntity.ok(estimated);
+    }
+    @GetMapping("/estimerDureeJours/{libelle}")
+    public ResponseEntity<Long> getEstimatedDurationInDays(@PathVariable String libelle) {
+        long duration = service.getEstimatedDurationDays(libelle);
+        return ResponseEntity.ok(duration);
     }
 
 }

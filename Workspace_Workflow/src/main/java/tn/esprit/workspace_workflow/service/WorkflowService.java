@@ -8,7 +8,6 @@ import tn.esprit.workspace_workflow.repository.WorkflowRepository;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,6 +100,7 @@ public class WorkflowService {
 
 
     public Map<String, Object> getDashboardStats() {
+
         List<Workflow> workflows = workflowRepository.findAll();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -130,7 +130,6 @@ public class WorkflowService {
                         },
                         Collectors.counting()
                 ));
-
 
         // Compilation des stats
         Map<String, Object> stats = new HashMap<>();
