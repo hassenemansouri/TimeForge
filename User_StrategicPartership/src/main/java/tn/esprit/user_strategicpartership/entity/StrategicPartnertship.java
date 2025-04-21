@@ -16,6 +16,7 @@ public class StrategicPartnertship {
   private String name;
   private String description;
   private LocalDateTime creationDate;
+  private LocalDateTime endDate;
   private List<String> participants;
   private String blockchainHash;
   private LocalDateTime blockchainTimestamp;
