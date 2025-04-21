@@ -12,7 +12,5 @@ public class CategorieRule {
     @Id
     private String id;
     private String libelle;
-    private int field;   // Exemple : Calendar.HOUR
-    private int amount;  // Exemple : 12
 
 }

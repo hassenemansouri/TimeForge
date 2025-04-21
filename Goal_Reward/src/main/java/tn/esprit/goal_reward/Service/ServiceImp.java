@@ -11,6 +11,8 @@ import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Repository.RewardRepository;
 import tn.esprit.goal_reward.client.UserClient;
 
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -35,37 +37,12 @@ public class ServiceImp implements IService {
 
         // Vérifie si la date de début est fournie et que la date de fin est absente
         if (goal.getStartDate() != null && goal.getEndDate() == null) {
-            goal.setEndDate(calculateEndDate(goal.getStartDate(), goal.getCategories()));
+            goal.setEndDate(calculateSmartEndDate(goal.getStartDate(), goal.getCategories()));
         }
         return goalRepository.save(goal);
     }
-    private static final Map<String, DurationRule> durationRules = new HashMap<>();
 
-    @PostConstruct
-    public void loadRulesFromDb() {
-        List<CategorieRule> rules = categorieRuleRepository.findAll();
-        for (CategorieRule rule : rules) {
-            durationRules.put(rule.getLibelle().toLowerCase().trim(),
-                    new DurationRule(rule.getField(), rule.getAmount()));
-        }
-    }
-    public Date calculateEndDate(Date startDate, List<Categorie> categories) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
 
-        if (categories != null && !categories.isEmpty()) {
-            for (Categorie categorie : categories) {
-                String key = categorie.getLibelle().toLowerCase().trim();
-                DurationRule rule = durationRules.getOrDefault(key, new DurationRule(Calendar.DAY_OF_YEAR, 3)); // Valeur par défaut de 3 jours
-                rule.apply(calendar);  // Applique la règle de durée sur le calendrier
-            }
-        } else {
-            // Aucune catégorie => règle par défaut
-            calendar.add(Calendar.DAY_OF_YEAR, 1); // Si aucune catégorie, ajoute 1 jour
-        }
-
-        return calendar.getTime();
-    }
 
     public List<Goal> getGoals() {
         return goalRepository.findAll();
@@ -181,10 +158,83 @@ public class ServiceImp implements IService {
 
         // Calcul de la date de fin en fonction des catégories
         if (goal.getStartDate() != null && goal.getEndDate() == null) {
-            goal.setEndDate(calculateEndDate(goal.getStartDate(), categoriesToAssign));
+            goal.setEndDate(calculateSmartEndDate(goal.getStartDate(), categoriesToAssign));
         }
 
         return goalRepository.save(goal);
+    }
+    public Date calculateSmartEndDate(Date startDate, List<Categorie> categories) {
+        if (categories == null || categories.isEmpty()) {
+            Calendar defaultCal = Calendar.getInstance();
+            defaultCal.setTime(startDate);
+            defaultCal.add(Calendar.DAY_OF_YEAR, 3); // fallback par défaut
+            return defaultCal.getTime();
+        }
+
+        List<Goal> allGoals = goalRepository.findAll();
+        List<Long> durations = new ArrayList<>();
+
+        for (Categorie cat : categories) {
+            String libelle = cat.getLibelle().toLowerCase().trim();
+            for (Goal g : allGoals) {
+                if (g.getCategories() != null && g.getStartDate() != null && g.getEndDate() != null) {
+                    boolean hasSameLibelle = g.getCategories().stream()
+                            .anyMatch(c -> c.getLibelle().equalsIgnoreCase(libelle));
+                    if (hasSameLibelle) {
+                        long days = ChronoUnit.DAYS.between(
+                                g.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                                g.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                        if (days >= 0) durations.add(days);
+                    }
+                }
+            }
+        }
+
+        long avgDays = durations.isEmpty() ? 3 : (long) durations.stream().mapToLong(d -> d).average().orElse(3);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startDate);
+        cal.add(Calendar.DAY_OF_YEAR, (int) avgDays);
+
+        return cal.getTime();
+    }
+    @Override
+    public Long getEstimatedDurationDays(String libelle) {
+        List<Goal> allGoals = goalRepository.findAll();
+        List<Long> durations = new ArrayList<>();
+
+        String target = libelle.trim().toLowerCase();
+
+        for (Goal goal : allGoals) {
+            if (goal.getStartDate() == null || goal.getEndDate() == null) continue;
+
+            List<Categorie> categories = goal.getCategories();
+            if (categories == null || categories.isEmpty()) continue;
+
+            boolean hasLibelle = categories.stream()
+                    .filter(c -> c.getLibelle() != null)
+                    .map(c -> c.getLibelle().trim().toLowerCase())
+                    .anyMatch(l -> l.equals(target));
+
+            if (hasLibelle) {
+                long days = ChronoUnit.DAYS.between(
+                        goal.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                        goal.getEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                );
+
+                durations.add(days);
+                System.out.println("📌 Goal: " + goal.getTitle() + " → " + days + " jours");
+            }
+        }
+
+        if (durations.size() < 3) {
+            System.out.println("⚠️ Pas assez de goals pour le libellé: " + libelle + " (trouvé " + durations.size() + ")");
+            return null;
+        }
+
+        double avg = durations.stream().mapToLong(Long::longValue).average().orElse(0);
+        long rounded = Math.round(avg);
+        System.out.println("✅ Moyenne réelle pour '" + libelle + "' = " + rounded + " jours");
+        return rounded;
     }
 
 }

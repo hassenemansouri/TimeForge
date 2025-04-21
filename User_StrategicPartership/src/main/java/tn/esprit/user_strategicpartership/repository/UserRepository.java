@@ -1,5 +1,6 @@
 package tn.esprit.user_strategicpartership.repository;
 
+import java.util.Arrays;
 import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -29,4 +30,6 @@ public interface UserRepository extends MongoRepository<User, String> {
         "{ 'email': { $regex: '.*?0.*', $options: 'i' } } " +  // Contains
         "] }")
     List<User> findBySearchQuery(String query);
+
+    List<User> findByIdIn(List<String> ids);
 }
