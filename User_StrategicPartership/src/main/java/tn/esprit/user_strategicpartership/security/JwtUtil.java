@@ -12,6 +12,7 @@ import java.util.function.Function;
 public class JwtUtil {
   private static final String SECRET_KEY = "your_512_bit_secret_your_512_bit_secret_your_512_bit_secret_123456";
   private static final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
+  private static final long PASSWORD_RESET_EXPIRATION = 15 * 60 * 1000;
 
   private Key getSigningKey() {
     return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -26,10 +27,17 @@ public class JwtUtil {
         .compact();
   }
 
-  public String extractUsername(String token) {
-    return extractClaim(token, Claims::getSubject);
+  //public String extractUsername(String token) {
+  //  return extractClaim(token, Claims::getSubject);
+ // }
+  public String extractUsername(String token) throws ExpiredJwtException {
+    return Jwts.parserBuilder()
+        .setSigningKey(getSigningKey())
+        .build()
+        .parseClaimsJws(token)
+        .getBody()
+        .getSubject();
   }
-
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
@@ -50,13 +58,21 @@ public class JwtUtil {
   private boolean isTokenExpired(String token) {
     return extractClaim(token, Claims::getExpiration).before(new Date());
   }
-
   public String generatePasswordResetToken(String email) {
     return Jwts.builder()
         .setSubject(email)
-        .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 15 minutes validity
-        .signWith(getSigningKey(), SignatureAlgorithm.HS512)  // use your existing secret key
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + PASSWORD_RESET_EXPIRATION))
+        .signWith(getSigningKey(), SignatureAlgorithm.HS256)
         .compact();
   }
+
+//  public String generatePasswordResetToken(String email) {
+//    return Jwts.builder()
+//        .setSubject(email)
+//        .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 15 minutes validity
+//        .signWith(getSigningKey(), SignatureAlgorithm.HS512)  // use your existing secret key
+//        .compact();
+//  }
 
 }

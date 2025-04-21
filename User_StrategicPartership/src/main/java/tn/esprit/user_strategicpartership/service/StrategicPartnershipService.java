@@ -52,4 +52,19 @@ public class StrategicPartnershipService {
     return partnershipRepository.findById(partnershipId)
         .orElseThrow(() -> new IllegalArgumentException("Partnership not found"));
   }
+
+  public void deletePartnership(String id) {
+    partnershipRepository.deleteById(id);
+  }
+
+  public StrategicPartnertship updatePartnership(String id, StrategicPartnertship partnership) {
+    StrategicPartnertship existingPartnership = partnershipRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Partnership not found"));
+
+    existingPartnership.setName(partnership.getName());
+    existingPartnership.setDescription(partnership.getDescription());
+    existingPartnership.setParticipants(partnership.getParticipants());
+
+    return partnershipRepository.save(existingPartnership);
+  }
 }
