@@ -1,12 +1,16 @@
 package tn.esprit.user_strategicpartership.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.user_strategicpartership.dto.UpdateUserDto;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.service.UserService;
 
@@ -83,5 +87,35 @@ public class UserController {
         }
         List<User> users = userService.searchUsers(query);
         return ResponseEntity.ok(users);
+    }
+    @PostMapping("/{userId}/photo")
+    public ResponseEntity<User> uploadUserPhoto(
+        @PathVariable String userId,
+        @RequestParam("file") MultipartFile file) throws IOException {
+        User updatedUser = userService.updateUserPhoto(userId, file);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    // Get user photo (returns Base64 string)
+    @GetMapping("/{userId}/photo")
+    public ResponseEntity<String> getUserPhoto(@PathVariable String userId) {
+        String photoBase64 = userService.getUserPhoto(userId);
+        return ResponseEntity.ok(photoBase64);
+    }
+
+    // Delete user photo
+    @DeleteMapping("/{userId}/photo")
+    public ResponseEntity<Void> deleteUserPhoto(@PathVariable String userId) {
+        userService.removeUserPhoto(userId);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{userId}")
+    public ResponseEntity<Optional<Object>> updateUser(
+        @PathVariable String userId,
+        @RequestBody UpdateUserDto updateUserDto
+    ) {
+        Optional<Object> updatedUser = Optional.ofNullable(
+            userService.updateUser(userId, updateUserDto));
+        return ResponseEntity.ok(updatedUser);
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User{
     @Id
     private String id;
+    private String photoBase64;  // Stores Base64-encoded image
+    private String photoContentType;
     private String name;
     private String email;
     private String password;
@@ -31,5 +33,8 @@ public class User{
     }
     private boolean isEmployee() {
         return this.role == Role.EMPLOYEE;
+    }
+    private boolean isAdmin() {
+        return this.role == Role.ADMIN;
     }
 }

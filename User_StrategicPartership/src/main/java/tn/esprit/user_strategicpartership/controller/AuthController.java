@@ -2,19 +2,17 @@ package tn.esprit.user_strategicpartership.controller;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import java.util.Map;
-import java.util.UUID;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.user_strategicpartership.dto.AuthRequest;
 import tn.esprit.user_strategicpartership.dto.AuthResponse;
+import tn.esprit.user_strategicpartership.dto.UserDTO;
 import tn.esprit.user_strategicpartership.entity.User;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
 import tn.esprit.user_strategicpartership.security.CustomUserDetailsService;
@@ -26,8 +24,10 @@ import tn.esprit.user_strategicpartership.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class AuthController {
+
+
   @Autowired
   private UserService userService;
 
@@ -67,26 +67,51 @@ public class AuthController {
     }
   }
 
-
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody AuthRequest request) {
     try {
-      // 1) Authenticate using the AuthenticationManager
+      // Authentication
       UsernamePasswordAuthenticationToken authToken =
           new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
-
       authenticationManager.authenticate(authToken);
 
-      // 2) Generate JWT token
+      // Get user
+      User user = userRepository.findByEmail(request.getEmail())
+          .orElseThrow(() -> new RuntimeException("User not found"));
+
+      // Generate token
       String jwtToken = jwtUtil.generateToken(request.getEmail());
 
-      // 3) Return token in response
-      return ResponseEntity.ok(new AuthResponse(jwtToken));
+      // Create response
+      AuthResponse response = new AuthResponse();
+      response.setToken(jwtToken);
+      response.setUser(new UserDTO(user)); // Using DTO for safety
+     // response.setUser(user);  // Directly use the entity
+      return ResponseEntity.ok(response);
 
     } catch (AuthenticationException ex) {
       return ResponseEntity.status(401).body("Invalid email or password!");
     }
   }
+//  @PostMapping("/login")
+//  public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+//    try {
+//      // 1) Authenticate using the AuthenticationManager
+//      UsernamePasswordAuthenticationToken authToken =
+//          new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
+//
+//      authenticationManager.authenticate(authToken);
+//
+//      // 2) Generate JWT token
+//      String jwtToken = jwtUtil.generateToken(request.getEmail());
+//
+//      // 3) Return token in response
+//      return ResponseEntity.ok(new AuthResponse(jwtToken));
+//
+//    } catch (AuthenticationException ex) {
+//      return ResponseEntity.status(401).body("Invalid email or password!");
+//    }
+//  }
 
 //  @PostMapping("/forgot-password")
 //  public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
@@ -121,6 +146,8 @@ public class AuthController {
 //      return ResponseEntity.status(500).body("Error sending email.");
 //    }
 //  }
+
+
 @PostMapping("/forgot-password")
 public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
   String email = body.get("email");
@@ -147,6 +174,38 @@ public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> bo
     return ResponseEntity.status(500).body("Error sending email.");
   }
 }
+  @PostMapping("/{id}/reset-password")
+  public ResponseEntity<String> initiatePasswordReset(@PathVariable String id) {
+    try {
+      // 1. Find user by ID
+      Optional<User> userOpt = userRepository.findById(id);
+      if (userOpt.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+      }
+
+      User user = userOpt.get();
+
+      // 2. Generate reset token (valid for 15 minutes)
+      String resetToken = jwtUtil.generatePasswordResetToken(user.getEmail());
+
+      // 3. Create reset link
+      String resetLink = "http://localhost:4200/reset-password?token=" + resetToken;
+
+      // 4. Email content
+      String content = "<p>Hello " + user.getName() + ",</p>"
+          + "<p>Please click <a href='" + resetLink + "'>here</a> to reset your password.</p>"
+          + "<p>This link will expire in 15 minutes.</p>";
+
+      // 5. Send email
+      brevoEmailService.sendEmail(user.getEmail(), "Password Reset Request", content);
+
+      return ResponseEntity.ok("Password reset email sent successfully");
+
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body("Error initiating password reset: " + e.getMessage());
+    }
+  }
   @PostMapping("/reset-password")
   public ResponseEntity<String> resetPassword(@RequestBody Map<String, String> body) {
     String token = body.get("token");

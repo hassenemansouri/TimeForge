@@ -3,11 +3,16 @@ package tn.esprit.user_strategicpartership.service;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.pdf.qrcode.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.user_strategicpartership.entity.StrategicPartnertship;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import tn.esprit.user_strategicpartership.entity.User;
+import tn.esprit.user_strategicpartership.repository.UserRepository;
 
 @Service
 public class StrategicPartnershipPdfService {
@@ -15,6 +20,12 @@ public class StrategicPartnershipPdfService {
   private static final Font TITLE_FONT = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
   private static final Font HEADER_FONT = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
   private static final Font NORMAL_FONT = new Font(Font.FontFamily.HELVETICA, 10);
+  @Autowired
+  private final UserRepository userRepository;
+
+  public StrategicPartnershipPdfService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   public byte[] generatePartnershipPdf(StrategicPartnertship partnership) throws DocumentException, IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -66,14 +77,21 @@ public class StrategicPartnershipPdfService {
   }
 
   private void addParticipants(Document document, StrategicPartnertship partnership) throws DocumentException {
-    Paragraph participantsHeader = new Paragraph("Participants:", HEADER_FONT);
-    participantsHeader.setSpacingBefore(15f);
-    participantsHeader.setSpacingAfter(10f);
-    document.add(participantsHeader);
+    List<User> participants = userRepository.findByIdIn(partnership.getParticipants());
 
-    List list = new List(List.ORDERED);
-    partnership.getParticipants().forEach(list::add);
-    document.add(list);
+    Paragraph header = new Paragraph("Participants:", HEADER_FONT);
+    header.setSpacingBefore(15f);
+    document.add(header);
+
+    Paragraph names = new Paragraph();
+    names.setSpacingAfter(10f);
+
+    String participantNames = participants.stream()
+        .map(User::getName)
+        .collect(Collectors.joining(", "));
+
+    names.add(participantNames);
+    document.add(names);
   }
 
   private void addBlockchainInfo(Document document, StrategicPartnertship partnership) throws DocumentException {
