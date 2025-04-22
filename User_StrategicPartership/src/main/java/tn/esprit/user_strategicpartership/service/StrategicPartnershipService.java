@@ -1,7 +1,13 @@
 package tn.esprit.user_strategicpartership.service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.user_strategicpartership.entity.BlockchainRecord;
@@ -67,4 +73,46 @@ public class StrategicPartnershipService {
 
     return partnershipRepository.save(existingPartnership);
   }
+
+  public Map<String, Object> getDashboardStats() {
+    List<StrategicPartnertship> partnerships = partnershipRepository.findAll();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+    // Statistiques mensuelles : nombre de créations de partenariats par mois
+    Map<String, Long> partnershipsPerMonth = partnerships.stream()
+            .collect(Collectors.groupingBy(
+                    p -> p.getCreationDate().format(formatter),
+                    Collectors.counting()
+            ));
+
+    // Moyenne des participants par mois
+    Map<String, Double> avgParticipantsPerMonth = partnerships.stream()
+            .collect(Collectors.groupingBy(
+                    p -> p.getCreationDate().format(formatter),
+                    Collectors.averagingInt(p -> p.getParticipants() != null ? p.getParticipants().size() : 0)
+            ));
+
+    // Répartition des partenariats par taille de participants
+    Map<String, Long> partnershipsBySize = partnerships.stream()
+            .collect(Collectors.groupingBy(
+                    p -> {
+                      int size = p.getParticipants() != null ? p.getParticipants().size() : 0;
+                      if (size <= 3) return "Petit (<=3)";
+                      else if (size <= 6) return "Moyen (4-6)";
+                      else return "Grand (>6)";
+                    },
+                    Collectors.counting()
+            ));
+
+    // Compilation des statistiques
+    Map<String, Object> stats = new HashMap<>();
+    stats.put("partnershipsPerMonth", partnershipsPerMonth);
+    stats.put("avgParticipantsPerMonth", avgParticipantsPerMonth);
+    stats.put("partnershipsBySize", partnershipsBySize);
+    stats.put("totalPartnerships", partnerships.size());
+
+    return stats;
+  }
+
 }
