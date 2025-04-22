@@ -20,7 +20,7 @@ def load_models():
     global model, vectorizer
     try:
         base_path = Path(__file__).resolve().parent
-        model_path = base_path / "models" / "workflow_model.pkl"
+        model_path = base_path / "models" / "TimeForge_model.pkl"
         vectorizer_path = base_path / "models" / "vectorizer.pkl"
 
         if not model_path.exists():
@@ -31,13 +31,13 @@ def load_models():
         model = joblib.load(model_path)
         vectorizer = joblib.load(vectorizer_path)
         logger.info("✅ Modèles chargés avec succès")
+
     except Exception as e:
         logger.error(f"❌ Erreur lors du chargement des modèles : {e}")
-        raise e  # Propager l'exception pour éviter le démarrage du serveur si un modèle est manquant
+        exit(1)
 
 load_models()
 
-# Fonction stricte pour récupérer et nettoyer les champs
 def get_clean_string_field(data, field_name):
     if field_name not in data:
         raise ValueError(f"Le champ '{field_name}' est requis.")
@@ -50,7 +50,7 @@ def get_clean_string_field(data, field_name):
 
 @app.route("/home", methods=["GET"])
 def home():
-    return "🚀 Operational Workflow Prediction Flask API is Up and Running! ✅"
+    return "🚀 Operational Project Prediction Flask API is Up and Running! ✅"
 
 @app.route("/predict", methods=["POST"])
 def predict():
