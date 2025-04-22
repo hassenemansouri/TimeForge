@@ -102,4 +102,9 @@ public class StrategicPartnershipController {
         ? ResponseEntity.ok(partnership)
         : ResponseEntity.notFound().build();
   }
+  @GetMapping("/stats")
+  public ResponseEntity<Map<String, Object>> getDashboardStats() {
+    Map<String, Object> stats = partnershipService.getDashboardStats();
+    return ResponseEntity.ok(stats);
+  }
 }

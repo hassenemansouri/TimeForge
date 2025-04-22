@@ -12,8 +12,10 @@ import tn.esprit.goal_reward.Repository.RewardRepository;
 import tn.esprit.goal_reward.client.UserClient;
 
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -235,6 +237,49 @@ public class ServiceImp implements IService {
         long rounded = Math.round(avg);
         System.out.println("✅ Moyenne réelle pour '" + libelle + "' = " + rounded + " jours");
         return rounded;
+    }
+
+    public Map<String, Object> getDashboardStats() {
+        List<Goal> goals = goalRepository.findAll();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+        // Statistiques mensuelles : nombre de créations de goals par mois
+        Map<String, Long> goalsPerMonth = goals.stream()
+                .filter(g -> g.getStartDate() != null)
+                .collect( Collectors.groupingBy(
+                        g -> g.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter),
+                        Collectors.counting()
+                ));
+
+        // Moyenne des catégories par goal par mois
+        Map<String, Double> avgCategoriesPerMonth = goals.stream()
+                .filter(g -> g.getStartDate() != null)
+                .collect(Collectors.groupingBy(
+                        g -> g.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatter),
+                        Collectors.averagingInt(g -> g.getCategories() != null ? g.getCategories().size() : 0)
+                ));
+
+        // Répartition des goals par taille de catégories
+        Map<String, Long> goalsBySize = goals.stream()
+                .collect(Collectors.groupingBy(
+                        g -> {
+                            int size = g.getCategories() != null ? g.getCategories().size() : 0;
+                            if (size <= 3) return "Petit (<=3)";
+                            else if (size <= 6) return "Moyen (4-6)";
+                            else return "Grand (>6)";
+                        },
+                        Collectors.counting()
+                ));
+
+        // Compilation des statistiques
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("goalsPerMonth", goalsPerMonth);
+        stats.put("avgCategoriesPerMonth", avgCategoriesPerMonth);
+        stats.put("goalsBySize", goalsBySize);
+        stats.put("totalGoals", goals.size());
+
+        return stats;
     }
 
 }

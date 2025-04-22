@@ -15,6 +15,7 @@ import tn.esprit.goal_reward.FullGoalResponse;
 import tn.esprit.goal_reward.Repository.CategorieRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Service.IService;
+import tn.esprit.goal_reward.Service.ServiceImp;
 
 import java.util.*;
 
@@ -27,6 +28,9 @@ public class TimeForgeController {
 
     @Autowired
     IService service;
+
+    @Autowired
+    private ServiceImp serviceImp;
     @Autowired
     private CategorieRepository categorieRepository;
     @Autowired
@@ -158,6 +162,10 @@ public class TimeForgeController {
     public ResponseEntity<Long> getEstimatedDurationInDays(@PathVariable String libelle) {
         long duration = service.getEstimatedDurationDays(libelle);
         return ResponseEntity.ok(duration);
+    }
+    @GetMapping("/dashboard/stats")
+    public Map<String, Object> getDashboardStats() {
+        return serviceImp.getDashboardStats ();
     }
 
 }

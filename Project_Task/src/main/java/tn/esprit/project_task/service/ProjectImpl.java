@@ -7,9 +7,13 @@ import tn.esprit.project_task.client.UserClient;
 import tn.esprit.project_task.entity.Project;
 import tn.esprit.project_task.repository.ProjectRepository;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -54,5 +58,45 @@ public class ProjectImpl implements IService{
                 .users ( users )
                 .build ();
     }
+    public Map<String, Object> getDashboardStats() {
+        List<Project> projects = projectRepository.findAll();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+
+        // Statistiques mensuelles : nombre de projets créés par mois
+        Map<String, Long> projectsPerMonth = projects.stream()
+                .collect( Collectors.groupingBy(
+                        p -> sdf.format(p.getStartDate()),
+                        Collectors.counting()
+                ));
+
+        // Moyenne des membres par projet (par mois)
+        Map<String, Double> averageMembersPerMonth = projects.stream()
+                .collect(Collectors.groupingBy(
+                        p -> sdf.format(p.getStartDate()),
+                        Collectors.averagingInt(p -> p.getMembers() != null ? p.getMembers().size() : 0)
+                ));
+
+        // Répartition des projets par taille (nombre de membres)
+        Map<String, Long> projectsBySize = projects.stream()
+                .collect(Collectors.groupingBy(
+                        p -> {
+                            int size = p.getMembers() != null ? p.getMembers().size() : 0;
+                            if (size <= 3) return "Petit (<=3)";
+                            else if (size <= 6) return "Moyen (4-6)";
+                            else return "Grand (>6)";
+                        },
+                        Collectors.counting()
+                ));
+
+        Map<String, Object> stats = new HashMap<> ();
+        stats.put("projectsPerMonth", projectsPerMonth);
+        stats.put("averageMembersPerMonth", averageMembersPerMonth);
+        stats.put("projectsBySize", projectsBySize);
+        stats.put("totalProjects", projects.size());
+
+        return stats;
+    }
+
+
 
 }

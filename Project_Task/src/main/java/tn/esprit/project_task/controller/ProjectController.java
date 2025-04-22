@@ -9,6 +9,7 @@ import tn.esprit.project_task.service.ProjectImpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,5 +44,10 @@ public class ProjectController {
         Project p = projectService.modifyProject(project);
         return p;
     }
+    @GetMapping("/dashboard-stats")
+    public ResponseEntity<Map<String, Object>> getDashboardStats() {
+        return ResponseEntity.ok(projectService.getDashboardStats());
+    }
+
 
 }
