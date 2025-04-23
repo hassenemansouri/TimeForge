@@ -33,3 +33,22 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
+paymee:
+  api:
+    url: https://sandbox.paymee.tn/api/v2
+    token: ${PAYMEE_API_TOKEN:61934b9ebdcc105bc73be88da52b3fd5e9c920fb}
+    redirect-timeout: 5000 # milliseconds
+  urls:
+    return-url: ${FRONTEND_URL:http://localhost:4200}/payment/success
+    cancel-url: ${FRONTEND_URL:http://localhost:4200}/payment/cancel
+    webhook-url: ${BACKEND_URL:http://localhost:8080}/api/payments/webhook
+  test:
+    phone: "11111111"
+    password: "11111111"
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.yourpackage: DEBUG
