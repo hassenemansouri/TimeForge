@@ -66,6 +66,7 @@ public class SecurityConfig {
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers(
+                "/api/time-logs/**",
                 "/auth/reset-password",
                 "/login",
                 "/error",
@@ -74,6 +75,12 @@ public class SecurityConfig {
                 "/api/blockchain/**",
                 "/users/**",
                 "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/timeforge/swagger-ui/**",
+                "/timeforge/v3/api-docs/**",
                 "/oauth2/**",
                 "/login/oauth2/**"
             ).permitAll()
