@@ -65,7 +65,9 @@ public class UserService {
     public List<User> findUsersByProjects(String projectId) {
         return userRepository.findAllByProjectId(projectId);
     }
-
+    public Optional<User> findById(String id) {
+        return userRepository.findById(id);
+    }
 
 //  public boolean sendPasswordResetEmail(String email) {
 //      Optional<User> userOpt = userRepository.findByEmail(email);
