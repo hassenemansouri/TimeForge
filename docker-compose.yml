@@ -1,0 +1,156 @@
+services:
+  config-server:
+    build: config-server  # Path to Dockerfile
+    image: config-server    # Optional: Tags the built image
+    ports: [ "8888:8888" ]
+    networks: [ "microservices-network" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+
+  user-service:
+    build: User_StrategicPartership
+    image: user_strategicpartnership-service
+    container_name: user-service  # Explicit container name
+    ports:
+      - "8100:8100"  # Add this port mapping
+    networks:
+      - microservices-network  # Add to network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SERVER_PORT=8100  # Explicit port declaration
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+    depends_on:
+      - config-server
+      - discovery-server
+      - mongo
+
+
+  discovery-server:
+    build: discovery  # Path to your discovery service
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    depends_on:
+      config-server:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker  # Optional if using profiles
+    healthcheck:
+      test: [ "CMD", "curl", "-f","http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  gateway-server:
+    build: gateway
+    container_name: gateway-server
+    ports:
+      - "8222:8222"
+    depends_on:
+      - config-server
+      - discovery-server
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - CONFIG_SERVER_URL=http://config-server:8888
+      - EUREKA_URL=http://discovery-service:8761/eureka/
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=*
+      - MANAGEMENT_ENDPOINTS_ENABLED=true
+    networks:
+      - microservices-network
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    hostname: mongo  # Explicit hostname
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - microservices-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  workspaces-service:
+    build: Workspace_Workflow
+    image: workspaces-service
+    container_name: workspaces-service
+    ports:
+      - "8500:8500"
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+    depends_on:
+      - config-server
+      - discovery-server
+      - mongo
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8500/timeforge/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  goal-service:
+    build: Goal_Reward
+    image: goal-service
+    container_name: goal-service
+    ports:
+      - "8200:8200"
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+
+    depends_on:
+      - config-server
+      - discovery-server
+      - mongo
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8200/timeforge/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  project-service:
+    build: Project_Task
+    image: project-service
+    container_name: project-service
+    ports:
+      - "8400:8400"
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://discovery-server:8761/eureka/
+
+    depends_on:
+      - config-server
+      - discovery-server
+      - mongo
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8400/timeforge/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  microservices-network:
+    driver: bridge
+    attachable: true
+
+volumes:
+  mongo-data:
