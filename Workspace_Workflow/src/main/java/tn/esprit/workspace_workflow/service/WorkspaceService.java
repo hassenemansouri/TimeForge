@@ -2,8 +2,7 @@ package tn.esprit.workspace_workflow.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.workspace_workflow.FullWorkspaceResponse;
-import tn.esprit.workspace_workflow.client.UserClient;
+
 import tn.esprit.workspace_workflow.entity.Workspace;
 import tn.esprit.workspace_workflow.repository.WorkspaceRepository;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Optional;
 public class WorkspaceService {
 
     private WorkspaceRepository workspaceRepository;
-    private UserClient userClient;
+
 
 
     public Workspace createWorkspace(Workspace workspace) {
@@ -58,18 +57,6 @@ public class WorkspaceService {
     }
 
 
-    public FullWorkspaceResponse findWorkspaceWithUsers(String workspaceId) {
-        var workspace = workspaceRepository.findById(workspaceId)
-                .orElseThrow(() -> new RuntimeException("Workspace introuvable : " + workspaceId));
 
-        var users = userClient.fundAllUsersByWorkspace(workspaceId);
-
-        return FullWorkspaceResponse.builder()
-                .Workspace_name(workspace.getWorkspaceName ())
-                .Workspace_description(workspace.getWorkspaceDescription ())
-                .Workflows(workspace.getWorkflows())
-                .users(users)
-                .build();
-    }
 
 }

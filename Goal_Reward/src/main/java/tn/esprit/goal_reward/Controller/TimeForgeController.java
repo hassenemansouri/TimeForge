@@ -1,22 +1,18 @@
 package tn.esprit.goal_reward.Controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.goal_reward.Entity.*;
 import tn.esprit.goal_reward.Repository.CategorieRuleRepository;
 
-import tn.esprit.goal_reward.FullGoalResponse;
 import tn.esprit.goal_reward.Repository.CategorieRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Service.IService;
 import tn.esprit.goal_reward.Service.ServiceImp;
-
 import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -59,10 +55,7 @@ public class TimeForgeController {
         return service.getGoalById(id);
     }
 
-    @GetMapping("WithUsers/{goal-id}")
-    public ResponseEntity<FullGoalResponse> findCollaborations(@PathVariable("goal-id") String goal_id){
-        return ResponseEntity.ok (service.findGoalWithUsers(goal_id));
-    }
+
 
     @DeleteMapping("/supprimerGoal/{id}")
     public void supprimerGoal(@PathVariable String id) {

@@ -1,9 +1,23 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: project-service
+    instance-id: ${spring.application.name}:${server.port}
+    appname: project-service
+    lease-renewal-interval-in-seconds: 3
+    lease-expiration-duration-in-seconds: 9
+    prefer-ip-address: false
+    metadata-map:
+      zone: primary  # Helps with load balancing
   client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server:8761/eureka/
+    # Add these new properties:
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 3
 
 server:
 
@@ -18,7 +32,7 @@ spring:
   # Configuration MongoDB
   data:
     mongodb:
-      uri: mongodb://localhost:27017/timeforge
+      uri: mongodb://root:rootpassword@mongo:27017/timeforge?authSource=admin  # Updated
       database: timeforge
 
   # Niveau de log pour MongoDB
@@ -26,7 +40,9 @@ spring:
     level:
       org.springframework.data.mongodb.core: DEBUG
   autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
   cloud:
     compatibility-verifier:
       enabled: false
@@ -34,7 +50,7 @@ spring:
     base-url: http://localhost:9411
   sleuth:
     sampler:
-          probability: 1.0
+      probability: 1.0
 
   # Configuration du serveur de l'application
 

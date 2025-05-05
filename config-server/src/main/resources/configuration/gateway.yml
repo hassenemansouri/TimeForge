@@ -7,53 +7,75 @@ spring:
         enabled: true
       routes:
         - id: users
-          uri: http://localhost:8100
+          uri: lb://user-service
           predicates:
             - Path=/users/**
+          filters:
+            - RewritePath=/users/(?<segment>.*), /timeforge/users/$\{segment}
 
         - id: goals
-          uri: http://localhost:8200
+          uri: lb://goal-service
           predicates:
             - Path=/goals/**
+          filters:
+            - RewritePath=/goals/(?<segment>.*), /timeforge/goals/$\{segment}
 
         - id: collaborations
-          uri: http://localhost:8300
+          uri: lb://collaboration-service
           predicates:
             - Path=/collaborations/**
+          filters:
+            - RewritePath=/collaborations/(?<segment>.*), /timeforge/collaborations/$\{segment}
 
         - id: projects
-          uri: http://localhost:8400
+          uri: lb://project-service
           predicates:
             - Path=/projects/**
+          filters:
+            - RewritePath=/projects/(?<segment>.*), /timeforge/projects/$\{segment}
 
         - id: workspaces
-          uri: http://localhost:8500
+          uri: lb://workspaces-service
           predicates:
             - Path=/workspaces/**
+          filters:
+            - RewritePath=/workspaces/(?<segment>.*), /timeforge/workspaces/$\{segment}
 
-        - id: keycloak
-          uri: http://localhost:8500
+        - id: ml-service
+          uri: lb://ml-service
           predicates:
-            - Path=/workspaces/**
+            - Path=/ml/**
+          filters:
+            - RewritePath=/ml/(?<segment>.*), /$\{segma
 
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://config-server:8888
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: gateway-server
+    prefer-ip-address: false
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+      defaultZone: http://discovery-server:8761/eureka/
+    healthcheck:
+      enabled: true
 
 logging:
   level:
+    org.springframework.cloud.gateway: DEBUG
     com.netflix.discovery: DEBUG
-    org.springframework.cloud.netflix.eureka: DEBUG
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,routes
+  endpoint:
+    health:
+      show-details: always
   tracing:
     sampling:
       probability: 1.0

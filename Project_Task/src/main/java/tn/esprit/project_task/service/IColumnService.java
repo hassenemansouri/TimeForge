@@ -15,4 +15,7 @@ public interface IColumnService {
     void saveListColumn(List<Column> listColumn);
     List<Column> getAllColumnsByIdBoard(String idBoard);
     Column removeColumnFromBoard(Column column);
+    Column addTaskToColumn(Column column) ;
+    Column moveTaskToColumn(String taskId, String fromColumnId, String toColumnId);
+
 }

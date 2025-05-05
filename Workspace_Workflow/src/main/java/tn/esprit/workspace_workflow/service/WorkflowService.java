@@ -2,7 +2,7 @@ package tn.esprit.workspace_workflow.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tn.esprit.workspace_workflow.client.User;
+
 import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.repository.WorkflowRepository;
 
@@ -45,12 +45,7 @@ public class WorkflowService {
                     if (updatedWorkflow.getSteps() != null) {
                         existingWorkflow.setSteps(updatedWorkflow.getSteps());
                     }
-                    if (updatedWorkflow.getCollaborators() != null) {
-                        existingWorkflow.setCollaborators(updatedWorkflow.getCollaborators());
-                    }
-                    if (updatedWorkflow.getCreator() != null) {
-                        existingWorkflow.setCreator(updatedWorkflow.getCreator());
-                    }
+
 
                     if (updatedWorkflow.getFileName () != null) {
                         existingWorkflow.setFileName(updatedWorkflow.getFileName());
@@ -79,18 +74,7 @@ public class WorkflowService {
         }
     }
 
-    public Workflow assignCollaborators(String workflowId, List<User> collaborators) {
-        Workflow workflow = workflowRepository.findById(workflowId)
-                .orElseThrow(() -> new RuntimeException("Workflow not found"));
 
-        if (collaborators == null || collaborators.isEmpty()) {
-            throw new IllegalArgumentException("The list of collaborators cannot be empty.");
-        }
-
-        workflow.setCollaborators(collaborators);
-        log.info("Collaborators assigned to workflow: {}", workflowId);
-        return workflowRepository.save(workflow);
-    }
 
     public String trackWorkflow(String workflowId) {
 

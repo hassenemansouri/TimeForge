@@ -28,17 +28,14 @@ public class BoardImpl implements IServiceBoard{
         return boardCollection;
     }
 
-    public List<BoardResponse> getBoardList() {
-        List<Board> boardCollection = new ArrayList<>();
-        boardRepository.findAll().forEach(boardCollection::add);
-        return boardCollection.stream()
-                .map(board -> new BoardResponse(board.get_id(),board.getTitle(), board.getDescription()))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public Board createBoard(BoardDTO boardDTO) {
-        Board board = Board.builder().title(boardDTO.getTitle()).description(boardDTO.getDescription()).build();
+        Board board = Board.builder()
+                .title(boardDTO.getTitle())
+                .description(boardDTO.getDescription())
+                .project(boardDTO.getProject())
+                .build();
         return boardRepository.save(board);
     }
 
@@ -50,5 +47,10 @@ public class BoardImpl implements IServiceBoard{
     public void deleteBoard(String boardId) {
         boardRepository.deleteById(boardId);
     }
+    @Override
+    public Board getBoardsByProject(String projectId) {
+            return boardRepository.findByProject(projectId);
+        }
+
 }
 

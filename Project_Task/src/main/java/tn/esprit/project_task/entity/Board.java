@@ -29,4 +29,6 @@ public class Board {
         private String _id;
         private String title;
         private String description;
+        @DBRef
+        private Project project;
 }

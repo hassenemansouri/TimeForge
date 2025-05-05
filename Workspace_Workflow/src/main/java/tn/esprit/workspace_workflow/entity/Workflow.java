@@ -4,7 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import tn.esprit.workspace_workflow.client.User;
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,20 +36,6 @@ public class Workflow {
     @NotNull(message = "endDate cannot be null")
     private Date endDate;
 
-    @NotNull(message = "collaborators cannot be null")
-    @DBRef
-    private List<User> collaborators = new ArrayList<>();
 
-    @DBRef
-    private User creator;
 
-    public boolean inviteUser(User user) {
-        if (this.creator != null && this.creator.isManager()) {
-            if (user != null && !collaborators.contains(user) && (user.isManager() || user.isEmployee())) {
-                collaborators.add(user);
-                return true;
-            }
-        }
-        return false;
-    }
 }

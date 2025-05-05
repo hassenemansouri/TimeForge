@@ -43,4 +43,9 @@ public class BoardController {
     public Board modifyBoard(@RequestBody Board board) {
         return boardService.modifyBoard(board);
     }
+    @GetMapping("/project/{projectId}")
+    public Board getBoardsByProject(@PathVariable String projectId) {
+        return boardService.getBoardsByProject(projectId);
+    }
+
 }

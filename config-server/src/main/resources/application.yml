@@ -1,5 +1,6 @@
 server:
   port: 8888
+
 spring:
   profiles:
     active: native
@@ -9,4 +10,4 @@ spring:
     config:
       server:
         native:
-          search-locations: classpath:/configuration
+          search-locations: file:/config/  # Changed to use Docker volume

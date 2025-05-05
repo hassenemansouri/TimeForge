@@ -25,8 +25,7 @@ public class UserService {
     @Autowired
     private  UserRepository userRepository;  // Injection avec @Autowired
 
-    @Autowired
-    private JavaMailSender mailSender;
+
 
     private final PasswordEncoder passwordEncoder;
 
@@ -86,13 +85,7 @@ public class UserService {
 //
 //      return true;
 //  }
-    private void sendEmail(String to, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject("Password Reset Request");
-        message.setText(text);
-        mailSender.send(message);
-    }
+
 
 
 

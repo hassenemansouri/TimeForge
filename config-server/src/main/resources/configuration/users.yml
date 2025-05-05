@@ -1,9 +1,23 @@
 eureka:
   instance:
-    hostname: localhost
+    instance-id: ${spring.application.name}:${server.port}  # Unique ID
+    appname: user-service
+    lease-renewal-interval-in-seconds: 3  # More aggressive
+    lease-expiration-duration-in-seconds: 9
+    prefer-ip-address: false
+    metadata-map:
+      zone: primary  # Helps with load balancing
+
   client:
+    healthcheck:
+      enabled: true
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server:8761/eureka/
+    # Add these new properties:
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 3
 
 server:
   port: 8100
@@ -11,48 +25,20 @@ server:
     context-path: /timeforge
 
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: your-email@gmail.com
-    password: your-email-password
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
   application:
-    name: users  # Correction du nom de l'application
-
-  # Configuration MongoDB
+    name: users
+  config:
+    activate:
+      on-profile: docker
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
   data:
     mongodb:
-      uri: mongodb://localhost:27017/users
+      uri: mongodb://root:rootpassword@mongo:27017/timeforge?authSource=admin
       database: users
-
-  # Niveau de log pour MongoDB
   logging:
     level:
       org.springframework.data.mongodb.core: DEBUG
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-    #  cloud:
-      #   compatibility-verifier:
-      #    enabled: false
-      #   zipkin:
-      #   base-url: http://localhost:9411
-      #   sleuth:
-        #        sampler:
-    #      probability: 1.0
-
-  # Configuration du serveur de l'application
-
-# Exclure l'autoconfiguration JDBC car on utilise MongoDB
-
-      # management:
-      #   tracing:
-      #      sampling:
-      #     probability: 0.0
-    #  enabled: false

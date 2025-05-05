@@ -1,19 +1,16 @@
 package tn.esprit.goal_reward.Service;
 
-import jakarta.annotation.PostConstruct;
+import java.time.temporal.ChronoUnit;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.goal_reward.Entity.*;
-import tn.esprit.goal_reward.FullGoalResponse;
 import tn.esprit.goal_reward.Repository.CategorieRepository;
 import tn.esprit.goal_reward.Repository.CategorieRuleRepository;
 import tn.esprit.goal_reward.Repository.GoalRepository;
 import tn.esprit.goal_reward.Repository.RewardRepository;
-import tn.esprit.goal_reward.client.UserClient;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,7 +19,6 @@ import java.util.stream.Collectors;
 public class ServiceImp implements IService {
 
     private GoalRepository goalRepository;
-    private UserClient userClient;
     private RewardRepository rewardRepository;
     private CategorieRepository categorieRepository;
     private CategorieRuleRepository categorieRuleRepository;
@@ -66,21 +62,7 @@ public class ServiceImp implements IService {
         return goalRepository.findById(id);
     }
 
-    public FullGoalResponse findGoalWithUsers(String goal_id) {
-        var goal = goalRepository.findById(goal_id)
-                .orElse(Goal.builder()
-                        .title("")
-                        .description("")
-                        .build());
 
-        var users = userClient.fundAllUsersByGoal(goal_id);
-
-        return FullGoalResponse.builder()
-                .title(goal.getTitle())
-                .description(goal.getDescription())
-                .users(users)
-                .build();
-    }
 
     public Reward ajouterReward(Reward reward) {
         return rewardRepository.save(reward);

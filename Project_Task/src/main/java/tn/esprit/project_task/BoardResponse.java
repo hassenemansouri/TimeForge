@@ -1,10 +1,11 @@
 package tn.esprit.project_task;
 
+
 import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter

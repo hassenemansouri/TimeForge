@@ -26,11 +26,13 @@ public class WebConfig implements WebMvcConfigurer {
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
-  @Bean
-  public WebClient paymeeWebClient(PaymeeConfig paymeeConfig) {
-    return WebClient.builder()
-        .baseUrl(paymeeConfig.getApi().getUrl())
-        .defaultHeader("Content-Type", "application/json")
-        .build();
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**")
+        .allowedOrigins("http://localhost:4200")
+        .allowedMethods("*")
+        .allowedHeaders("*")
+        .allowCredentials(true)
+        .maxAge(3600);
   }
 }

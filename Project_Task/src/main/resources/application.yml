@@ -1,5 +1,36 @@
 spring:
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://config-server:8888
+  profiles:
+    active: docker
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
   application:
     name: projects  # Correction du nom de l'application
+    data:
+      mongodb:
+        uri: mongodb://root:rootpassword@mongo:27017/timeforge?authSource=admin
+      logging:
+        level:
+          org.springframework: DEBUG
+          tn.esprit: DEBUG
+          org.springframework.data.mongodb.core: DEBUG
+          root: INFO
+          org.springframework.web: DEBUG
+          org.springframework.boot.autoconfigure: DEBUG
+      eureka:
+        client:
+          service-url:
+          defaultZone: http://discovery-server:8761/eureka/
+        instance:
+          prefer-ip-address: true
+  management:
+    tracing:
+      sampling:
+        probability: 0.0
+    enabled: false
+
+

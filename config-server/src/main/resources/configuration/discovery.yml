@@ -1,16 +1,24 @@
-      logging:
-        level:
-          com.netflix.discovery: DEBUG
-          org.springframework.cloud.netflix.eureka: DEBUG
+eureka:
+  server:
+    enable-self-preservation: false  # Disable in dev to force instance expiration
+    eviction-interval-timer-in-ms: 3000  # Check dead instances every 5s
+    response-cache-update-interval-ms: 3  000  # Faster registry updates
+
+
+
+
 server:
   port: 8761
+
 spring:
-  config:
-    import: optional:configserver:http://localhost:8888
   application:
-    name: discovery
+    name: discovery-server  # Standardized naming
+  config:
+    activate:
+      on-profile: docker  # Explicit profile activation
 
 logging:
   level:
+    com.netflix.eureka: DEBUG
     com.netflix.discovery: DEBUG
-    org.springframework.cloud.netflix.eureka: DEBUG
+    org.springframework.cloud: DEBUG

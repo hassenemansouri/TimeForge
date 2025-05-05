@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/columns") // anciennement /projects
+@RequestMapping("/columns")
 @AllArgsConstructor
 public class ColumnController {
 
@@ -53,5 +53,22 @@ public class ColumnController {
     @PutMapping("/deleteBoard")
     public Column removeBoardFromColomn(@RequestBody Column column) {
         return columnService.removeColumnFromBoard(column);
+
+
     }
+
+    @PutMapping("/addTaskToColumn")
+    public Column addTaskToColumn(@RequestBody Column column) {
+        return columnService.addTaskToColumn(column);
+    }
+
+    @PutMapping("/move-task")
+    public Column moveTask(
+            @RequestParam String taskId,
+            @RequestParam String fromColumnId,
+            @RequestParam String toColumnId
+    ) {
+        return columnService.moveTaskToColumn(taskId, fromColumnId, toColumnId);
+    }
+
 }

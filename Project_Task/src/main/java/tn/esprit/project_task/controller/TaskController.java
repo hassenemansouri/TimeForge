@@ -3,7 +3,14 @@ package tn.esprit.project_task.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tn.esprit.project_task.dto.EstimateResult;
+import tn.esprit.project_task.dto.ProjectEstimationRequest;
+import tn.esprit.project_task.dto.TaskEstimationRequest;
+import tn.esprit.project_task.entity.Project;
 import tn.esprit.project_task.entity.Task;
+import tn.esprit.project_task.entity.TaskEstimation;
+import tn.esprit.project_task.repository.TaskRepository;
+import tn.esprit.project_task.service.TaskEstimationService;
 import tn.esprit.project_task.service.TaskImpl;
 
 import java.util.List;
@@ -15,6 +22,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class TaskController {
     private TaskImpl taskService;
+    private TaskEstimationService taskEstimationService;
+    private TaskRepository taskRepository;
 
     @GetMapping
     public List<Task> getAllTasks() {
@@ -27,9 +36,8 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task savedTask = taskService.createTask(task);
-        return ResponseEntity.ok(savedTask); // Assure que le JSON retourné contient bien l’_id
+    public Task createTask(@RequestBody Task task) {
+        return taskService.createTask(task) ;
     }
 
 
@@ -45,18 +53,31 @@ public class TaskController {
     public List<Task> getTasksByColumnId(@PathVariable String columnId) {
         return taskService.getTasksByColumnId(columnId);
     }
-//    @GetMapping("/search")
-//    public List<Task> searchTasks(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) String priority,
-//            @RequestParam(required = false) String assignedToId,
-//            @RequestParam(required = false) String projectId
-//    ) {
-//        return taskService.searchTasks(name, priority, assignedToId, projectId);
-//   }
+    @PostMapping("/estimate")
+    public TaskEstimation estimateTask(@RequestBody TaskEstimationRequest request) {
+        return taskEstimationService.estimateTask(request);
+    }
+    @GetMapping("/{id}/estimate")
+    public TaskEstimation estimateExistingTask(@PathVariable String id) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
 
-//    @GetMapping("/project/{projectId}")
-//    public List<Task> getTasksByProjectId(@PathVariable String projectId) {
-//        return taskService.getTasksByProjectId(projectId);
-//    }
+        if (optionalTask.isEmpty()) {
+            // Retourne null, ou vous pouvez créer un TaskEstimation par défaut ou lever une RuntimeException simple
+            return null; // ou new TaskEstimation(0, "Task not found", 0, "N/A");
+        }
+
+        Task task = optionalTask.get();
+
+        TaskEstimationRequest request = new TaskEstimationRequest();
+        request.setPriority(task.getPriority());
+        request.setDueDate(task.getDueDate());
+
+        return taskEstimationService.estimateTask(request);
+    }
+    @GetMapping("/projects/{id}")
+    public List<Task> getTasksByProject(@PathVariable Project id) {
+        return taskService.getTasksByProject(id);
+    }
+
+
 }

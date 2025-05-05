@@ -1,6 +1,13 @@
 spring:
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://config-server:8888
+  profiles:
+    active: docker
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
   application:
     name: workspaces
   main:
@@ -13,8 +20,7 @@ spring:
           allow-credentials: true
   data:
     mongodb:
-          uri: mongodb://localhost:27017/timeforge
-          database: timeforge
+      uri: mongodb://root:rootpassword@mongo:27017/timeforge?authSource=admin
   logging:
     level:
       org.springframework: DEBUG
@@ -25,8 +31,7 @@ spring:
       org.springframework.boot.autoconfigure: DEBUG
 
 
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
   cloud:
     compatibility-verifier:
           enabled: false
@@ -49,6 +54,7 @@ management:
 
 logging:
   level:
+    root: INFO
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     com:

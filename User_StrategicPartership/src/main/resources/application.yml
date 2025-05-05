@@ -1,24 +1,18 @@
 spring:
-  config:
-    import: optional:configserver:http://localhost:8888
   application:
-    name: users  # Make sure the name is correct
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 474610756884-0lui56qp0jkv53rl45trhgpsqcc520p2.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - email
-              - profile
-          github:
-            client-id: your-github-client-id
-            client-secret: your-github-client-secret
-            scope:
-              - user:email
-              - read:user
+    name: users
+  config:
+    import: optional:configserver:http://config-server:8888
+  profiles:
+    active: docker
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+  data:
+    mongodb:
+      uri: mongodb://root:rootpassword@mongo:27017/users?authSource=admin
 brevo:
   api-key: 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
   sender-email: hassenemansouri35@gmail.com
@@ -30,25 +24,16 @@ frontend:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://discovery-server:8761/eureka/
   instance:
     prefer-ip-address: true
-paymee:
-  api:
-    url: https://sandbox.paymee.tn/api/v2
-    token: ${PAYMEE_API_TOKEN:61934b9ebdcc105bc73be88da52b3fd5e9c920fb}
-    redirect-timeout: 5000 # milliseconds
-  urls:
-    return-url: ${FRONTEND_URL:http://localhost:4200}/payment/success
-    cancel-url: ${FRONTEND_URL:http://localhost:4200}/payment/cancel
-    webhook-url: ${BACKEND_URL:http://localhost:8080}/api/payments/webhook
-  test:
-    phone: "11111111"
-    password: "11111111"
-
+flouci:
+  app_token: "a1e1cfab-f9b8-47ae-8145-05ec72d950ad"
+  app_secret: "933d642f-9478-417d-b575-601b23e07105"
+  developer_tracking_id : "fdaae6d7-dd05-4cbc-8f0b-226476c1d920"
 
 logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
-    com.yourpackage: DEBUG
+    com.your pzackage: DEBUG

@@ -81,12 +81,5 @@ public class WorkspaceController {
         }
     }
 
-    @GetMapping("/withUsers/{workspaceId}")
-    public ResponseEntity<FullWorkspaceResponse> findWorkspaceWithUsers(@PathVariable String workspaceId) {
-        try {
-            return ResponseEntity.ok(workspaceService.findWorkspaceWithUsers(workspaceId));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+
 }

@@ -1,11 +1,18 @@
 package tn.esprit.project_task.service;
 
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.project_task.FullProjectResponse;
 import tn.esprit.project_task.client.UserClient;
+import tn.esprit.project_task.entity.Board;
 import tn.esprit.project_task.entity.Project;
+import tn.esprit.project_task.entity.Task;
+import tn.esprit.project_task.repository.BoardRepository;
 import tn.esprit.project_task.repository.ProjectRepository;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -19,8 +26,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProjectImpl implements IService{
 
+    private final BoardRepository boardRepository;
     private ProjectRepository projectRepository;
     private UserClient userClient;
+
+
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
     }
@@ -37,9 +47,35 @@ public class ProjectImpl implements IService{
     public void deleteProject(String id) {
         projectRepository.deleteById(id);
     }
-    public Project modifyProject(Project project) {
+    public Project update(Project project) {
 
         return projectRepository.save(project);
+    }
+
+
+
+    @Override
+    public List<Task> getTaskProjects(String id) {
+        Project project = getProjectById(id).get();
+        return project.getTasks();
+    }
+
+    @Override
+    public List<Project> getProjectsNotInBoard() {
+
+        List<Project> projects = projectRepository.findAll();
+        List<Board> boradList =boardRepository.findAll();
+        List<String> idBorjectsInBorad = new ArrayList<>();
+        if(!boradList.isEmpty() && boradList!=null){
+            boradList.forEach(board -> {
+                idBorjectsInBorad.add(board.getProject().getProject_id());
+            });
+        }
+
+
+        return projects.stream()
+                .filter(project -> !idBorjectsInBorad.contains(project.getProject_id()))
+                .collect(Collectors.toList());
     }
 
 
@@ -50,7 +86,7 @@ public class ProjectImpl implements IService{
                         .description ( "" )
                         .build());
 
-        var users = userClient.fundAllUsersByProjects(projet_id); // Corrigé ici
+        var users = userClient.fundAllUsersByProjects(projet_id);
 
         return FullProjectResponse.builder()
                 .title (project.getTitle ())

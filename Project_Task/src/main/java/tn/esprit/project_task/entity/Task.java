@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import tn.esprit.project_task.client.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,17 +28,17 @@ public class Task {
     @JsonProperty("_id")
     private String _id;
 
-    @NotNull(message = "Task name cannot be null")
-    @Size(min = 3, max = 100, message = "Task name must be between 3 and 100 characters")
+    @NotNull
+    @Size(min = 3, max = 20)
     private String name;
 
-    @NotNull(message = "Task description cannot be null")
-    @Size(min = 10, message = "Description must be at least 10 characters")
+    @NotNull
+    @Size(min = 10)
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date createdAt = new Date();
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "Due date must be in the present or future")
+    @FutureOrPresent()
     private Date dueDate;
     private TaskPriority priority = TaskPriority.HIGH;
     private String columnId;
@@ -47,4 +48,7 @@ public class Task {
     private Project project;
     @DBRef
     private User assignedTo;
+
+
+
 }

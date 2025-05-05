@@ -16,20 +16,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import tn.esprit.user_strategicpartership.entity.OAuth2LoginSuccessHandler;
 import tn.esprit.user_strategicpartership.repository.UserRepository;
 import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
-import tn.esprit.user_strategicpartership.service.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
   // Add these new dependencies
-  @Autowired
-  private CustomOAuth2UserService customOAuth2UserService;
-  @Autowired
-  private OAuth2LoginSuccessHandler oauth2LoginSuccessHandler;
+
 
   public SecurityConfig(UserRepository userRepository) {
     this.userRepository = userRepository;
@@ -82,7 +77,8 @@ public class SecurityConfig {
                 "/timeforge/v3/api-docs/**",
                 "/oauth2/**",
                 "/login/oauth2/**",
-                "/api/payments/**"
+                "/api/payments/**",
+                "/payment/**"
             ).permitAll()
             .anyRequest().authenticated()
         )

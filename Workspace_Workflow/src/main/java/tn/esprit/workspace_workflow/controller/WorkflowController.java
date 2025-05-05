@@ -15,9 +15,9 @@ import tn.esprit.workspace_workflow.entity.Workflow;
 import tn.esprit.workspace_workflow.service.FileService;
 import tn.esprit.workspace_workflow.service.WorkflowService;
 import tn.esprit.workspace_workflow.service.TwilioSmsService;
-import tn.esprit.workspace_workflow.client.User;
 
-import java.util.Arrays;
+
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -137,11 +137,7 @@ public class WorkflowController {
         return workflowService.trackWorkflow(workflowId);
     }
 
-    @PutMapping("/assign-collaborators/{workflowId}")
-    public ResponseEntity<Workflow> assignCollaborators(@PathVariable String workflowId, @RequestBody List<User> collaborators) {
-        Workflow updatedWorkflow = workflowService.assignCollaborators(workflowId, collaborators);
-        return ResponseEntity.ok(updatedWorkflow);
-    }
+
     // Méthodes pour la gestion des fichiers (issues du FileController)
     @PostMapping("/{workflowId}/files/upload")
     public ResponseEntity<Object> uploadFile(@PathVariable String workflowId,

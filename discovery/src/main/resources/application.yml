@@ -1,17 +1,24 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery-server
+    prefer-ip-address: false  # Changed to false for better hostname resolution
   client:
-    register-with-eureka: false
-    fetch-registry: false
+    register-with-eureka: true  # Should register with itself
+    fetch-registry: true        # Should fetch registry
     service-url:
-      defaultZone : http://${eureka.instance.hostname}:${server.port}/eureka/
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    # Add these for better performance
+    registry-fetch-interval-seconds: 5
+    initial-instance-info-replication-interval-seconds: 3
 
 server:
   port: 8761
+  address: 0.0.0.0
 
 spring:
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://config-server:8888  # Use service name
   application:
     name: discovery
+  profiles:
+    active: docker  # Optional: use docker profile

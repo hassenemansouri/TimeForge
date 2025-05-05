@@ -1,7 +1,7 @@
 package tn.esprit.project_task.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import tn.esprit.project_task.client.User;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,14 +24,14 @@ import java.util.List;
 public class Project {
 
     @Id
-    @Column(name = "project_id")
-    private String projet_id;
-    @NotNull(message = "Project title cannot be null")
-    @Size(min = 3, max = 50, message = "Project title must be between 3 and 50 characters")
+    @JsonProperty("project_id")
+    private String project_id;
+    @NotNull
+    @Size(min = 3, max = 50)
     private String title;
 
-    @NotNull(message = "Project description cannot be null")
-    @Size(min = 10, message = "Description must be at least 10 characters")
+    @NotNull
+    @Size(min = 10)
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -43,6 +42,10 @@ public class Project {
     private Date endDate;
 
     private ProjectCategory category = ProjectCategory.DESIGN;
+
+    @DBRef
+    private List<Task> tasks;
+
 
     @DBRef
     private User owner;
